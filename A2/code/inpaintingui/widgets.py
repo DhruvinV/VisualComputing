@@ -142,8 +142,11 @@ class RootWidget(FloatLayout):
 #########################################
  def execute_run():
 	status,mssg = self.inpaintingControl.runAlgorithm(self.ids.imviewer, maxIterations=None)
-	if(status
-
+	if(status == True):
+		self.display_current_image()
+	else:
+		self.show_error_popup(self.currentModeMsg(), msg)
+	
 return 
 #########################################
         
