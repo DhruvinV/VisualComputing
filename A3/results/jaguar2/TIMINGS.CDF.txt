@@ -1,0 +1,31 @@
+python viscomp.py --source ../test_images/jaguar2/source.png --target ../test_images/jaguar2/target.png --init-nnf ../results/jaguar2/jaguar2.init.npy --iters 3 --partial-results --nnf-image --nnf-vectors --rec-source --output ../results/jaguar2/jaguar2
+-----------------------------------------------------------------
+PatchMatch parameters:
+	Initial NNF: 		../results/jaguar2/jaguar2.init.npy
+	Iterations: 		3
+	Patch size: 		7
+	Alpha: 			0.5
+	W: 			630
+	Propagation enabled: 	True
+	Random search enabled: 	True
+Output path and base filename: 	../results/jaguar2/jaguar2
+Visualization parameters:
+	Output files: 		correspondences, color nnf, rec'd source 
+	NNF subsampling: 	100
+	NNF line width: 	0.5
+	NNF line color: 	r
+	Matplotlib server mode: False
+	Tmp directory: 		./
+-----------------------------------------------------------------
+Running iteration 1...
+	Function _propagation_and_random_search ran 11.7255
+	Function _reconstruct_source ran 0.0050
+Running iteration 2...
+	Function _propagation_and_random_search ran 11.2024
+	Function _reconstruct_source ran 0.0046
+Running iteration 3...
+	Function _propagation_and_random_search ran 10.9251
+	Function _reconstruct_source ran 0.0045
+	Function _reconstruct_source ran 0.0047
+Done.
+
