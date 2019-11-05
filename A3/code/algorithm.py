@@ -80,10 +80,17 @@ def propagation_and_random_search(source_patches, target_patches,
     #############################################
     ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
     #############################################
+    # propagation
+    if odd_iteration == True:
+        # consider f(x-1,y),f(x,y-1)
+        print(source_patches.shape)
+    else:
+        # consider f(x+1,y),f(x,y+1)
+        pass
 
+    # random search
 
     #############################################
-
     return new_f, best_D, global_vars
 
 
