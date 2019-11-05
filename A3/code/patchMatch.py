@@ -113,8 +113,10 @@ class PatchMatch:
 
         # COPY INTO THIS SPACE YOUR IMPLEMENTATION OF THIS FUNCTION
         # FROM YOUR algorithm.py of A1
-
-
+        read = cv.imread(filename)
+        if read is not None:
+            self._images[key] = read.astype(np.uint8)
+            return True,"Image read success"
         #########################################
         return success, msg
 
@@ -131,10 +133,10 @@ class PatchMatch:
         #########################################
         ## PLACE YOUR CODE BETWEEN THESE LINES ##
         #########################################
-
-        # COPY INTO THIS SPACE YOUR IMPLEMENTATION OF THIS FUNCTION
-        # FROM YOUR algorithm.py of A1
-
+        read = np.round(self._images[key])
+        write = cv.imwrite(filename,read.astype(np.uint8))
+        if(write):
+            return True,"write successful"
         #########################################
         return success, msg
 
