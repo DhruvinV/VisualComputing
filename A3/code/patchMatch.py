@@ -116,6 +116,7 @@ class PatchMatch:
         read = cv.imread(filename)
         if read is not None:
             self._images[key] = read.astype(np.uint8)
+            print(key,self._images[key].shape)
             return True,"Image read success"
         #########################################
         return success, msg
