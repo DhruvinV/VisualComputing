@@ -13,6 +13,7 @@
 
 # import basic packages
 import numpy as np
+import sys
 
 # basic numpy configuration
 
@@ -81,9 +82,28 @@ def propagation_and_random_search(source_patches, target_patches,
     ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
     #############################################
     # propagation
+    print(new_f)
+    if(best_D is None):
+        best_D = np.zeros((source_patches.shape[0],source_patches.shape[1]))
+        k = 0
+        for i in range(source_patches.shape[0]):
+            for j in range(source_patches.shape[1]):
+                # print([i,j], [i+new_f[i,j,0],j+new_f[i,j,2]])
+                print([new_f[i,j,0],new_f[i,j,1]])
+                # print(best_D[i,j].shape)
+                k+=1
+        print(k)
+    sys.exit()
     if odd_iteration == True:
+        print(best_D.shape)
         # consider f(x-1,y),f(x,y-1)
-        print(source_patches.shape)
+        # print(source_patches.shape)
+        # print(target_patches.shape)
+        # # print(best_D.shape)
+       	# x = make_coordinates_matrix(source_patches.shape[:3])
+        # print(x.shape)
+        # print(new_f.shape)
+        pass
     else:
         # consider f(x+1,y),f(x,y+1)
         pass
@@ -93,7 +113,8 @@ def propagation_and_random_search(source_patches, target_patches,
     #############################################
     return new_f, best_D, global_vars
 
-
+# def generate_best_D(nnf):
+#     return make_coordinates_matrix(nnf.shape[:3])
 # This function uses a computed NNF to reconstruct the source image
 # using pixels from the target image. The function takes two input
 # arguments
