@@ -129,25 +129,7 @@ def propagation_and_random_search(source_patches, target_patches,
                         new_f[i,j] = new_f[x,y]
                         best_D[i,j] = new_d
     if random_enabled:
-        M, N = best_D.shape
-        R = np.random.uniform(-1, 1, (random_len, 2))
-        u = (np.tile(new_f[i,j], (random_len, 1)) + (w * alphalist * R)).astype(int)
-        ux = u[:,0] + i
-        uy = u[:,1] + j
-        ux[ux >= M] = M - 1
-        ux[ux < 0] = 0
-        uy[uy >= N] = N - 1
-        uy[uy < 0] = 0
-        target_chosen = target_patches[ux, uy]
-        source_matrix = np.tile(source_patches[i,j], (random_len, 1, 1))
-        scores = -np.linalg.norm(source_matrix - target_chosen, axis = (1, 2))
-        scores[random_len - 1] = best_D[i, j]
-        ux[random_len - 1] = new_f[i,j,0] + i
-        uy[random_len - 1] = new_f[i,j,1] + j
-        idx = np.argmax(scores)
-        best_D[i, j] = scores[idx]
-        new_f[i, j, 0] = ux[idx] - i
-        new_f[i, j, 1] = uy[idx] - j
+        pass
     #############################################
     return new_f, best_D, global_vars
 
