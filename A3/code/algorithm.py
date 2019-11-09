@@ -84,6 +84,7 @@ def propagation_and_random_search(source_patches, target_patches,
     # propagation
     source_patches[np.isnan(source_patches)] = 0
     target_patches[np.isnan(target_patches)] = 0
+    print(alpha,w)
     if (isinstance(best_D, np.ndarray) == False):
         if(best_D is None):
             best_D = np.zeros((source_patches.shape[0],source_patches.shape[1]))
