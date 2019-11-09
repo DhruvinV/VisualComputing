@@ -115,6 +115,7 @@ def NNS(img, ref, p_size, itr):
     # print(A_w,"A_W")
     f, dist, img_padding = initialization(img, ref, p_size)
     # print(f.shape,dist.shape,img_padding.shape)
+    print(p_size)
     for itr in range(1, itr+1):
         if itr % 2 == 0:
             for i in range(A_h - 1, -1, -1):
