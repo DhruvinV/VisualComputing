@@ -94,6 +94,7 @@ def random_search(f, a, dist, A_padding, B, p_size, alpha=0.5):
     while search_h > 1 and search_w > 1:
         search_min_r = max(b_x - search_h, p)
         search_max_r = min(b_x + search_h, B_h-p)
+        print(search_min_r,search_max_r)
         random_b_x = np.random.randint(search_min_r, search_max_r)
         search_min_c = max(b_y - search_w, p)
         search_max_c = min(b_y + search_w, B_w - p)
