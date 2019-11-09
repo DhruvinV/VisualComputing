@@ -82,16 +82,22 @@ def propagation_and_random_search(source_patches, target_patches,
     ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
     #############################################
     # propagation
+<<<<<<< HEAD
     print(source_patches.shape)
     print(new_f.shape)
 
     source_patches[np.isnan(source_patches)] = 0
     target_patches[np.isnan(target_patches)] = 0
     if (isinstance(best_D, np.ndarray) == False):
+=======
+    print(new_f)
+    if(best_D is None):
+>>>>>>> cd4331d7571f5935bdff3e9161f36f4279517386
         best_D = np.zeros((source_patches.shape[0],source_patches.shape[1]))
         k = 0
         for i in range(source_patches.shape[0]):
             for j in range(source_patches.shape[1]):
+<<<<<<< HEAD
                 best_D[i,j] = np.linalg.norm(source_patches[i,j]-target_patches[i,j])
                 k+=1
     # print(best_D)
@@ -133,17 +139,44 @@ def propagation_and_random_search(source_patches, target_patches,
                         new_d = np.linalg.norm(source_patches[i,j]-target_patches[x,y])
                         new_f[i,j] = new_f[x,y]
                         best_D[i,j] = new_d
+=======
+                # print([i,j], [i+new_f[i,j,0],j+new_f[i,j,2]])
+                print([new_f[i,j,0],new_f[i,j,1]])
+                # print(best_D[i,j].shape)
+                k+=1
+        print(k)
+    sys.exit()
+    if odd_iteration == True:
+        print(best_D.shape)
+        # consider f(x-1,y),f(x,y-1)
+        # print(source_patches.shape)
+        # print(target_patches.shape)
+        # # print(best_D.shape)
+       	# x = make_coordinates_matrix(source_patches.shape[:3])
+        # print(x.shape)
+        # print(new_f.shape)
+        pass
+    else:
+        # consider f(x+1,y),f(x,y+1)
+        pass
+
+>>>>>>> cd4331d7571f5935bdff3e9161f36f4279517386
     # random search
     if random_enabled:
         pass
     #############################################
     return new_f, best_D, global_vars
 
+<<<<<<< HEAD
 def get_key_from_dict(some_dict):
     min_value = min(some_dict.values())
     for key,value in some_dict.items():
         if(min_value == value):
             return key
+=======
+# def generate_best_D(nnf):
+#     return make_coordinates_matrix(nnf.shape[:3])
+>>>>>>> cd4331d7571f5935bdff3e9161f36f4279517386
 # This function uses a computed NNF to reconstruct the source image
 # using pixels from the target image. The function takes two input
 # arguments
