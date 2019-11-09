@@ -60,7 +60,6 @@ def propagation(f, a, dist, A_padding, B, p_size, is_odd):
         # print(d_left)
         d_up = dist[x, max(y-1, 0)]
         d_current = dist[x, y]
-        print(type(d_current))
         idx = np.argmin(np.array([d_current, d_left, d_up]))
         if idx == 1:
             f[x, y] = f[max(x - 1, 0    ), y]
@@ -94,7 +93,7 @@ def random_search(f, a, dist, A_padding, B, p_size, alpha=0.5):
     while search_h > 1 and search_w > 1:
         search_min_r = max(b_x - search_h, p)
         search_max_r = min(b_x + search_h, B_h-p)
-        print(search_min_r,search_max_r)
+        # print(search_min_r,search_max_r)
         random_b_x = np.random.randint(search_min_r, search_max_r)
         search_min_c = max(b_y - search_w, p)
         search_max_c = min(b_y + search_w, B_w - p)
@@ -102,6 +101,7 @@ def random_search(f, a, dist, A_padding, B, p_size, alpha=0.5):
         search_h = B_h * alpha ** i
         search_w = B_w * alpha ** i
         b = np.array([random_b_x, random_b_y])
+        print(b)
         d = cal_distance(a, b, A_padding, B, p_size)
         if d < dist[x, y]:
             dist[x, y] = d
