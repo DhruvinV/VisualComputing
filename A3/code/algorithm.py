@@ -85,7 +85,6 @@ def propagation_and_random_search(source_patches, target_patches,
     source_patches[np.isnan(source_patches)] = 0
     target_patches[np.isnan(target_patches)] = 0
     if (isinstance(best_D, np.ndarray) == False):
-        print(new_f)
         if(best_D is None):
             best_D = np.zeros((source_patches.shape[0],source_patches.shape[1]))
             k = 0
@@ -93,7 +92,6 @@ def propagation_and_random_search(source_patches, target_patches,
                 for j in range(source_patches.shape[1]):
                     best_D[i,j] = np.linalg.norm(source_patches[i,j]-target_patches[i,j])
                     k+=1
-    print(best_D.shape)
     if propagation_enabled:
         if odd_iteration == True:
             # print(best_D.shape)
