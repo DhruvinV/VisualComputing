@@ -33,7 +33,6 @@ def initialization(A, B, p_size):
     A_padding[p:A_h+p, p:A_w+p, :] = A
     f = np.zeros([A_h, A_w], dtype=object)
     dist = np.zeros([A_h, A_w])
-
     for i in range(A_h):
         for j in range(A_w):
             a = np.array([i, j])
@@ -115,7 +114,6 @@ def NNS(img, ref, p_size, itr):
     f, dist, img_padding = initialization(img, ref, p_size)
     # print(f.shape,dist.shape,img_padding.shape)
     print(p_size)
-
     for itr in range(1, itr+1):
         if itr % 2 == 0:
             for i in range(A_h - 1, -1, -1):
