@@ -33,26 +33,37 @@ def initialization(A, B, p_size):
     A_padding[p:A_h+p, p:A_w+p, :] = A
     f = np.zeros([A_h, A_w], dtype=object)
     dist = np.zeros([A_h, A_w])
+    print(A_h)
+    print(A_w)
     for i in range(A_h):
         for j in range(A_w):
             a = np.array([i, j])
+            # print(a.shape)
             b = np.array([random_B_r[i, j], random_B_c[i, j]], dtype=np.int32)
+            # print(b.shape)
             f[i, j] = b
+            # print(f[i,j].shape)
+            # print(A_padding.shape)
             dist[i, j] = cal_distance(a, b, A_padding, B, p_size)
     return f, dist, A_padding
 
 def propagation(f, a, dist, A_padding, B, p_size, is_odd):
     A_h = np.size(A_padding, 0) - p_size + 1
     A_w = np.size(A_padding, 1) - p_size + 1
+    # print(A_h)
+    # print(p_size.shape)
+    print((dist).shape)
     x = a[0]
     y = a[1]
     if is_odd:
         d_left = dist[max(x-1, 0), y]
+        # print(d_left)
         d_up = dist[x, max(y-1, 0)]
         d_current = dist[x, y]
+        print(type(d_current))
         idx = np.argmin(np.array([d_current, d_left, d_up]))
         if idx == 1:
-            f[x, y] = f[max(x - 1, 0), y]
+            f[x, y] = f[max(x - 1, 0    ), y]
             dist[x, y] = cal_distance(a, f[x, y], A_padding, B, p_size)
         if idx == 2:
             f[x, y] = f[x, max(y - 1, 0)]
@@ -98,11 +109,11 @@ def random_search(f, a, dist, A_padding, B, p_size, alpha=0.5):
 
 def NNS(img, ref, p_size, itr):
     A_h = np.size(img, 0)
-    print(A_h,"A_H")
+    # print(A_h,"A_H")
     A_w = np.size(img, 1)
-    print(A_w,"A_W")
+    # print(A_w,"A_W")
     f, dist, img_padding = initialization(img, ref, p_size)
-    print(f.shape,dist.shape,img_padding.shape)
+    # print(f.shape,dist.shape,img_padding.shape)
     for itr in range(1, itr+1):
         if itr % 2 == 0:
             for i in range(A_h - 1, -1, -1):

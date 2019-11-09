@@ -13,6 +13,7 @@
 
 # import basic packages
 import numpy as np
+import sys
 
 # basic numpy configuration
 
@@ -81,19 +82,68 @@ def propagation_and_random_search(source_patches, target_patches,
     ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
     #############################################
     # propagation
-    if odd_iteration == True:
-        # consider f(x-1,y),f(x,y-1)
-        print(source_patches.shape)
-    else:
-        # consider f(x+1,y),f(x,y+1)
-        pass
+    print(source_patches.shape)
+    print(new_f.shape)
 
+    source_patches[np.isnan(source_patches)] = 0
+    target_patches[np.isnan(target_patches)] = 0
+    if (isinstance(best_D, np.ndarray) == False):
+        best_D = np.zeros((source_patches.shape[0],source_patches.shape[1]))
+        k = 0
+        for i in range(source_patches.shape[0]):
+            for j in range(source_patches.shape[1]):
+                best_D[i,j] = np.linalg.norm(source_patches[i,j]-target_patches[i,j])
+                k+=1
+    # print(best_D)
+    # sys.exit()
+    # print(type(best_D))
+    print(best_D.shape)
+    if propagation_enabled:
+        if odd_iteration == True:
+            # print(best_D.shape)
+            # consider f(x-1,y),f(x,y-1)
+            for i in range(0,source_patches.shape[0]):
+                for j in range(0,source_patches.shape[1]):
+                    d_set = dict()
+                    d_set[(i,max(j-1,0))] = best_D[i,max(j-1,0)]
+                    d_set[(max(i-1,0),j)] = best_D[max(i-1, 0), j]
+                    d_set[(i,j)] = best_D[i,j]
+                    (x,y) = get_key_from_dict(d_set)
+                    if((x,y)==(i,j)):
+                        continue
+                    else:
+                        new_d = np.linalg.norm(source_patches[i,j]-target_patches[x,y])
+                        new_f[i,j] = new_f[x,y]
+                        best_D[i,j] = new_d
+        else:
+            # consider f(x+1,y),f(x,y+1)
+            h_min,h_max,w_min,w_max = source_patches.shape[0]-1,-1,source_patches.shape[1]-1,-1
+            # examining the offsets in reverse scan order starting from bottom
+            # goint to top
+            for i in range(h_min,h_max,-1):
+                for j in range(w_min,w_max,-1):
+                    d_set = dict()
+                    d_set[(min(i+1,h_min),j)] = best_D[min(i+1,h_min),j]
+                    d_set[(i,min(j+1,w_min))] = best_D[i,min(j+1,w_min)]
+                    d_set[(i,j)] = best_D[i,j]
+                    (x,y) = get_key_from_dict(d_set)
+                    if((x,y)==(i,j)):
+                        continue
+                    else:
+                        new_d = np.linalg.norm(source_patches[i,j]-target_patches[x,y])
+                        new_f[i,j] = new_f[x,y]
+                        best_D[i,j] = new_d
     # random search
-
+    if random_enabled:
+        pass
     #############################################
     return new_f, best_D, global_vars
 
-
+def get_key_from_dict(some_dict):
+    min_value = min(some_dict.values())
+    for key,value in some_dict.items():
+        if(min_value == value):
+            return key
 # This function uses a computed NNF to reconstruct the source image
 # using pixels from the target image. The function takes two input
 # arguments
