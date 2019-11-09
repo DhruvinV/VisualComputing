@@ -101,7 +101,7 @@ def random_search(f, a, dist, A_padding, B, p_size, alpha=0.5):
         search_h = B_h * alpha ** i
         search_w = B_w * alpha ** i
         b = np.array([random_b_x, random_b_y])
-        print(b)
+        # print(b)
         d = cal_distance(a, b, A_padding, B, p_size)
         if d < dist[x, y]:
             dist[x, y] = d
