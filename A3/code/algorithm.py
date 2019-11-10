@@ -84,7 +84,6 @@ def propagation_and_random_search(source_patches, target_patches,
     # propagation
     source_patches[np.isnan(source_patches)] = 0
     target_patches[np.isnan(target_patches)] = 0
-    print(alpha,w)
     if (isinstance(best_D, np.ndarray) == False):
         if(best_D is None):
             best_D = np.zeros((source_patches.shape[0],source_patches.shape[1]))
@@ -93,6 +92,8 @@ def propagation_and_random_search(source_patches, target_patches,
                 for j in range(source_patches.shape[1]):
                     best_D[i,j] = np.linalg.norm(source_patches[i,j]-target_patches[i,j])
                     k+=1
+    print(best_D.shape)
+    h_min,h_max,w_min,w_max,offsets = 0,0,0,0,1
     if propagation_enabled:
         if odd_iteration == True:
             # print(best_D.shape)
@@ -100,36 +101,76 @@ def propagation_and_random_search(source_patches, target_patches,
             for i in range(0,source_patches.shape[0]):
                 for j in range(0,source_patches.shape[1]):
                     d_set = dict()
-                    d_set[(i,max(j-1,0))] = best_D[i,max(j-1,0)]
-                    d_set[(max(i-1,0),j)] = best_D[max(i-1, 0), j]
+                    if(within_dim([i,j]+new_f[i,max(j-1,0)],source_patches) == False):
+                        loc_in_B = [i,j]+new_f[i,max(j-1,0)]
+                        new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
+                        d_set[(i,max(j-1,0))] = new_score
+                    # d_set[(i,max(j-1,0))] = best_D[i,max(j-1,0)]
+                    if(within_dim([i,j]+new_f[max(i-1, 0), j],source_patches) == False):
+                        loc_in_B = [i,j]+new_f[max(i-1, 0), j]
+                        new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
+                        d_set[(max(i-1,0),j)] = new_score
                     d_set[(i,j)] = best_D[i,j]
                     (x,y) = get_key_from_dict(d_set)
                     if((x,y)==(i,j)):
                         continue
                     else:
-                        new_d = np.linalg.norm(source_patches[i,j]-target_patches[x,y])
+                        # if(0<=x2<target)
                         new_f[i,j] = new_f[x,y]
-                        best_D[i,j] = new_d
+                        best_D[i,j] = d_set[(x,y)]
+            h_min,h_max,w_min,w_max,offsets = 0, source_patches[0],0,source_patches.shape[1],1
         else:
             # consider f(x+1,y),f(x,y+1)
-            h_min,h_max,w_min,w_max = source_patches.shape[0]-1,-1,source_patches.shape[1]-1,-1
+            h_min,h_max,w_min,w_max,offsets = source_patches.shape[0]-1,-1,source_patches.shape[1]-1,-1,-1
             # examining the offsets in reverse scan order starting from bottom
             # goint to top
             for i in range(h_min,h_max,-1):
                 for j in range(w_min,w_max,-1):
                     d_set = dict()
-                    d_set[(min(i+1,h_min),j)] = best_D[min(i+1,h_min),j]
-                    d_set[(i,min(j+1,w_min))] = best_D[i,min(j+1,w_min)]
+                    if(within_dim([i,j]+new_f[min(i+1,h_min),j],source_patches) == False):
+                        loc_in_B = [i,j]+new_f[min(i+1,h_min),j]
+                        new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
+                        d_set[(min(i+1,h_min),j)] = new_score
+                    # d_set[(i,max(j-1,0))] = best_D[i,max(j-1,0)]
+                    if(within_dim([i,j]+new_f[i,min(j+1,w_min)],source_patches) == False):
+                        loc_in_B = [i,j]+new_f[i,min(j+1,w_min)]
+                        new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
+                        d_set[(i,min(j+1,w_min))] = new_score
                     d_set[(i,j)] = best_D[i,j]
                     (x,y) = get_key_from_dict(d_set)
                     if((x,y)==(i,j)):
                         continue
                     else:
-                        new_d = np.linalg.norm(source_patches[i,j]-target_patches[x,y])
+                        # if(0<=x2<target)
                         new_f[i,j] = new_f[x,y]
-                        best_D[i,j] = new_d
-    if random_enabled:
-        pass
+                        best_D[i,j] = d_set[(x,y)]
+                    # d_set = dict()
+                    # d_set[(min(i+1,h_min),j)] = best_D[min(i+1,h_min),j]
+                    # d_set[(i,min(j+1,w_min))] = best_D[i,min(j+1,w_min)]
+                    # d_set[(i,j)] = best_D[i,j]
+                    # (x,y) = get_key_from_dict(d_set)
+                    # if((x,y)==(i,j)):
+                    #     continue
+                    # else:
+                    #     # x2,x3 = [i,j] + new_f[x,y]
+                    #     new_d = np.linalg.norm(source_patches[i,j]-target_patches[x,y])
+                    #     new_f[i,j] = new_f[x,y]
+                    #     best_D[i,j] = new_d
+    # PS I had already coded the propgation part when I started working on random and relazied I need to loop again so added some extra variables
+    if random_enabled is False:
+        print("in random")
+        #calcualte w*alpha**i < 1
+        # final = np.ceil(np
+        # 1/
+
+        for i in (h_min,h_max,offsets):
+            for j in (w_min,w_max,offsets):
+                pass
+                # one for more loop as Equation 1 asks to consider all patcfhes until w*alpha**i < 1
+        Rx = np.random.uniform(-1,1)
+        Ry = np.random.uniform(-1,1)
+
+
     #############################################
     return new_f, best_D, global_vars
 
@@ -138,6 +179,9 @@ def get_key_from_dict(some_dict):
     for key,value in some_dict.items():
         if(min_value == value):
             return key
+
+def within_dim(x,y):
+    return (x[0] < 0 or x[0] >= y.shape[0]) or (x[1] < 0 or x[1] >= y.shape[1])
 # def generate_best_D(nnf):
 #     return make_coordinates_matrix(nnf.shape[:3])
 # This function uses a computed NNF to reconstruct the source image
@@ -164,11 +208,12 @@ def get_key_from_dict(some_dict):
 def reconstruct_source_from_target(target, f):
     rec_source = None
 
+
     #############################################
     ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
     #############################################
-
-
+    coord = make_coordinates_matrix(target.shape)
+    rec_source = target[coord[:,:,0]+f[:,:,0],coord[:,:,1]+f[:,:,1]]
     #############################################
 
     return rec_source
