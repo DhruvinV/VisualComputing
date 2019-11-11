@@ -121,17 +121,17 @@ def propagation_and_random_search(source_patches, target_patches,
 
                     if(random_enabled):
                         print("in random")
-                        k = 0
-                        while( k < int(np.ceil(- np.log10(w)/ np.log10(alpha)))):
+                        lol = 0
+                        while( lol < int(np.ceil(- np.log10(w)/ np.log10(alpha)))):
                             Rx = np.random.uniform(-1,1)
                             Ry = np.random.uniform(-1,1)
-                            u = f[i,j] + np.multiply(w*(a**k),np.array(Rx,Ry))
+                            u = f[i,j] + np.multiply(w*(a**lol),np.array(Rx,Ry))
                             if(within_dim((i+u[0], j+u[1]),target_patches)==False):
                                 new_score = np.linalg.norm(source_patches[i,j]-target_patches[i+u[0],j+u[1]])
                                 if(new_dist < best_D[i,j]):
                                     new_f[i,j] = u
                                     best_D[i,j] = new_score
-                            k = k+1
+                            lol = lol+1
             h_min,h_max,w_min,w_max,offsets = 0, source_patches[0],0,source_patches.shape[1],1
     # if random_enab
         else:
@@ -163,18 +163,18 @@ def propagation_and_random_search(source_patches, target_patches,
                         best_D[i,j] = d_set[(x,y)]
                     if(random_enabled):
                         print("in random")
-                        k=0
-                        while( k < int(np.ceil(- np.log10(w)/ np.log10(alpha)))):
+                        lol = 0
+                        while( lol < int(np.ceil(- np.log10(w)/ np.log10(alpha)))):
                             Rx = np.random.uniform(-1,1)
                             Ry = np.random.uniform(-1,1)
-                            u = f[i,j] + np.multiply(w*(a**k),np.array(Rx,Ry))
+                            u = f[i,j] + np.multiply(w*(a**lol),np.array(Rx,Ry))
                             # x,y = i + u[0], j+u[1]
                             if(within_dim((i + u[0], j+u[1]),target_patches)==False):
                                 new_score = np.linalg.norm(source_patches[i,j]-target_patches[i+u[0],j+u[1]])
                                 if(new_dist < best_D[i,j]):
                                     new_f[i,j] = u
                                     best_D[i,j] = new_score
-                            k = k+1
+                            lol = lol+1
 
     # PS I had already coded the propgation part when I started working on random and relazied I need to loop again so added some extra variables
     #############################################
