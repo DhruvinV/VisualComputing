@@ -127,7 +127,7 @@ def propagation_and_random_search(source_patches, target_patches,
                             Ry = np.random.uniform(-1,1)
                             print(alpha)
                             print(w)
-                            u = f[i,j] + np.multiply(w*(alpha**lol),np.array(Rx,Ry))
+                            u = f[i,j] + ((w*(alpha**lol))*np.array(Rx,Ry))
                             if(within_dim((i+u[0], j+u[1]),target_patches)==False):
                                 new_score = np.linalg.norm(source_patches[i,j]-target_patches[i+u[0],j+u[1]])
                                 if(new_dist < best_D[i,j]):
