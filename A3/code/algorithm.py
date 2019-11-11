@@ -118,7 +118,21 @@ def propagation_and_random_search(source_patches, target_patches,
                         # if(0<=x2<target)
                         new_f[i,j] = new_f[x,y]
                         best_D[i,j] = d_set[(x,y)]
+
+                    if(random_enabled):
+                        print("in random")
+                        while( k < int(np.ceil(- np.log10(w)/ np.log10(alpha)))):
+                            Rx = np.random.uniform(-1,1)
+                            Ry = np.random.uniform(-1,1)
+                            u = f[i,j] + np.multiply(w*(a**k),np.array(Rx,Ry)
+                            # x,y = i + u[0], j+u[1]
+                            if(within_dim((i + u[0], j+u[1]),target_patches)==False):
+                                new_score = np.linalg.norm(source_patches[i,j]-target_patches[i+u[0],j+u[1]])
+                                if(new_dist < best_D[i,j]):
+                                    new_f[i,j] = u
+                                    best_D[i,j] = new_score
             h_min,h_max,w_min,w_max,offsets = 0, source_patches[0],0,source_patches.shape[1],1
+    # if random_enab
         else:
             # consider f(x+1,y),f(x,y+1)
             h_min,h_max,w_min,w_max,offsets = source_patches.shape[0]-1,-1,source_patches.shape[1]-1,-1,-1
@@ -127,15 +141,17 @@ def propagation_and_random_search(source_patches, target_patches,
             for i in range(h_min,h_max,-1):
                 for j in range(w_min,w_max,-1):
                     d_set = dict()
+                    # d_set[(min(i+1,h_min),j)] = best_D[min(i+1,h_min),j]
                     if(within_dim([i,j]+new_f[min(i+1,h_min),j],source_patches) == False):
                         loc_in_B = [i,j]+new_f[min(i+1,h_min),j]
                         new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
                         d_set[(min(i+1,h_min),j)] = new_score
-                    # d_set[(i,max(j-1,0))] = best_D[i,max(j-1,0)]
+                    # d_set[(i,min(j+1,w_min))] = best_D[i,min(j+1,w_min)]
                     if(within_dim([i,j]+new_f[i,min(j+1,w_min)],source_patches) == False):
                         loc_in_B = [i,j]+new_f[i,min(j+1,w_min)]
                         new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
                         d_set[(i,min(j+1,w_min))] = new_score
+                     # d_set[(i,j)] = best_D[i,j]
                     d_set[(i,j)] = best_D[i,j]
                     (x,y) = get_key_from_dict(d_set)
                     if((x,y)==(i,j)):
@@ -144,33 +160,20 @@ def propagation_and_random_search(source_patches, target_patches,
                         # if(0<=x2<target)
                         new_f[i,j] = new_f[x,y]
                         best_D[i,j] = d_set[(x,y)]
-                    # d_set = dict()
-                    # d_set[(min(i+1,h_min),j)] = best_D[min(i+1,h_min),j]
-                    # d_set[(i,min(j+1,w_min))] = best_D[i,min(j+1,w_min)]
-                    # d_set[(i,j)] = best_D[i,j]
-                    # (x,y) = get_key_from_dict(d_set)
-                    # if((x,y)==(i,j)):
-                    #     continue
-                    # else:
-                    #     # x2,x3 = [i,j] + new_f[x,y]
-                    #     new_d = np.linalg.norm(source_patches[i,j]-target_patches[x,y])
-                    #     new_f[i,j] = new_f[x,y]
-                    #     best_D[i,j] = new_d
+                    if(random_enabled):
+                        print("in random")
+                        while( k < int(np.ceil(- np.log10(w)/ np.log10(alpha)))):
+                            Rx = np.random.uniform(-1,1)
+                            Ry = np.random.uniform(-1,1)
+                            u = f[i,j] + np.multiply(w*(a**k),np.array(Rx,Ry)
+                            # x,y = i + u[0], j+u[1]
+                            if(within_dim((i + u[0], j+u[1]),target_patches)==False):
+                                new_score = np.linalg.norm(source_patches[i,j]-target_patches[i+u[0],j+u[1]])
+                                if(new_dist < best_D[i,j]):
+                                    new_f[i,j] = u
+                                    best_D[i,j] = new_score
+
     # PS I had already coded the propgation part when I started working on random and relazied I need to loop again so added some extra variables
-    if random_enabled is False:
-        print("in random")
-        #calcualte w*alpha**i < 1
-        # final = np.ceil(np
-        # 1/
-
-        for i in (h_min,h_max,offsets):
-            for j in (w_min,w_max,offsets):
-                pass
-                # one for more loop as Equation 1 asks to consider all patcfhes until w*alpha**i < 1
-        Rx = np.random.uniform(-1,1)
-        Ry = np.random.uniform(-1,1)
-
-
     #############################################
     return new_f, best_D, global_vars
 
