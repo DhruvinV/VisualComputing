@@ -82,6 +82,7 @@ def propagation_and_random_search(source_patches, target_patches,
     ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
     #############################################
     # propagation
+    itera = int(np.ceil(- np.log10(w)/ np.log10(alpha)))
     source_patches[np.isnan(source_patches)] = 0
     target_patches[np.isnan(target_patches)] = 0
     if (isinstance(best_D, np.ndarray) == False):
@@ -122,13 +123,12 @@ def propagation_and_random_search(source_patches, target_patches,
                     if(random_enabled):
                         # print("in random")
                         lol = 0
-                        itera = int(np.ceil(- np.log10(w)/ np.log10(alpha)))
                         while( lol < itera):
                             Rx = np.random.uniform(-1,1)
                             Ry = np.random.uniform(-1,1)
                             # print(alpha)
                             # print((w*(alpha**lol)))
-                            u = f[i,j] + [Rx*(w*(alpha**lol)),Ry+(w*(alpha**lol))]
+                            u = f[i,j] + [Rx*(w*(alpha**lol)),Ry*(w*(alpha**lol))]
                             if(within_dim((i+u[0], j+u[1]),target_patches)==False):
                                 x,y = i+u[0],j+u[1]
                                 # print(x,y)
@@ -169,13 +169,13 @@ def propagation_and_random_search(source_patches, target_patches,
                     if(random_enabled):
                         # print("in random")
                         lol = 0
-                        itera = int(np.ceil(- np.log10(w)/ np.log10(alpha)))
+#                         itera = int(np.ceil(- np.log10(w)/ np.log10(alpha)))
 #                         print(itera)
-                        while( lol < itera):
+                        while(lol < itera):
                             Rx = np.random.uniform(-1,1)
                             Ry = np.random.uniform(-1,1)
                             # u = f[i,j] + np.multiply(w*(alpha**lol),np.array(Rx,Ry))
-                            u = f[i,j] + [Rx*(w*(alpha**lol)),Ry+(w*(alpha**lol))]
+                            u = f[i,j] + [Rx*(w*(alpha**lol)),Ry*(w*(alpha**lol))]
                             # x,y = i + u[0], j+u[1]
                             if(within_dim((i + u[0], j+u[1]),target_patches)==False):
                                 x = i+u[0]
