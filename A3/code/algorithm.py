@@ -120,7 +120,7 @@ def propagation_and_random_search(source_patches, target_patches,
                         best_D[i,j] = d_set[(x,y)]
 
                     if(random_enabled):
-                        print("in random")
+                        # print("in random")
                         lol = 0
                         while( lol < int(np.ceil(- np.log10(w)/ np.log10(alpha)))):
                             Rx = np.random.uniform(-1,1)
@@ -166,7 +166,7 @@ def propagation_and_random_search(source_patches, target_patches,
                         new_f[i,j] = new_f[x,y]
                         best_D[i,j] = d_set[(x,y)]
                     if(random_enabled):
-                        print("in random")
+                        # print("in random")
                         lol = 0
                         while( lol < int(np.ceil(- np.log10(w)/ np.log10(alpha)))):
                             Rx = np.random.uniform(-1,1)
