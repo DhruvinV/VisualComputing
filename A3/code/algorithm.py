@@ -125,9 +125,9 @@ def propagation_and_random_search(source_patches, target_patches,
                         while( lol < int(np.ceil(- np.log10(w)/ np.log10(alpha)))):
                             Rx = np.random.uniform(-1,1)
                             Ry = np.random.uniform(-1,1)
-                            print(alpha)
-                            print((w*(alpha**lol)))
-                            u = f[i,j] + ((w*(alpha**lol))*np.array(Rx,Ry))
+                            # print(alpha)
+                            # print((w*(alpha**lol)))
+                            u = f[i,j] + [Rx*(w*(alpha**lol)),Ry+(w*(alpha**lol))]
                             if(within_dim((i+u[0], j+u[1]),target_patches)==False):
                                 new_score = np.linalg.norm(source_patches[i,j]-target_patches[i+u[0],j+u[1]])
                                 if(new_dist < best_D[i,j]):
@@ -169,7 +169,8 @@ def propagation_and_random_search(source_patches, target_patches,
                         while( lol < int(np.ceil(- np.log10(w)/ np.log10(alpha)))):
                             Rx = np.random.uniform(-1,1)
                             Ry = np.random.uniform(-1,1)
-                            u = f[i,j] + np.multiply(w*(alpha**lol),np.array(Rx,Ry))
+                            # u = f[i,j] + np.multiply(w*(alpha**lol),np.array(Rx,Ry))
+                            u = f[i,j] + [Rx*(w*(alpha**lol)),Ry+(w*(alpha**lol))]
                             # x,y = i + u[0], j+u[1]
                             if(within_dim((i + u[0], j+u[1]),target_patches)==False):
                                 new_score = np.linalg.norm(source_patches[i,j]-target_patches[i+u[0],j+u[1]])
