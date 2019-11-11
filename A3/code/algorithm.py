@@ -122,7 +122,8 @@ def propagation_and_random_search(source_patches, target_patches,
                     if(random_enabled):
                         # print("in random")
                         lol = 0
-                        while( lol < int(np.ceil(- np.log10(w)/ np.log10(alpha)))):
+                        itera = int(np.ceil(- np.log10(w)/ np.log10(alpha)))
+                        while( lol < itera):
                             Rx = np.random.uniform(-1,1)
                             Ry = np.random.uniform(-1,1)
                             # print(alpha)
@@ -168,7 +169,9 @@ def propagation_and_random_search(source_patches, target_patches,
                     if(random_enabled):
                         # print("in random")
                         lol = 0
-                        while( lol < int(np.ceil(- np.log10(w)/ np.log10(alpha)))):
+                        itera = int(np.ceil(- np.log10(w)/ np.log10(alpha))))
+                        print(itera)
+                        while( lol < itera):
                             Rx = np.random.uniform(-1,1)
                             Ry = np.random.uniform(-1,1)
                             # u = f[i,j] + np.multiply(w*(alpha**lol),np.array(Rx,Ry))
@@ -176,12 +179,13 @@ def propagation_and_random_search(source_patches, target_patches,
                             # x,y = i + u[0], j+u[1]
                             if(within_dim((i + u[0], j+u[1]),target_patches)==False):
                                 x = i+u[0]
-                                y = j+[1]
+                                y = j+u[1]
                                 new_score = np.linalg.norm(source_patches[i,j]-target_patches[int(x),int(y)])
                                 if(new_score < best_D[i,j]):
                                     new_f[i,j] = u
                                     best_D[i,j] = new_score
                             lol = lol+1
+                        print(lol)
 
     # PS I had already coded the propgation part when I started working on random and relazied I need to loop again so added some extra variables
     #############################################
