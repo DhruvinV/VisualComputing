@@ -169,7 +169,7 @@ def propagation_and_random_search(source_patches, target_patches,
                     if(random_enabled):
                         # print("in random")
                         lol = 0
-                        itera = int(np.ceil(- np.log10(w)/ np.log10(alpha))))
+                        itera = int(np.ceil(- np.log10(w)/ np.log10(alpha)))
                         print(itera)
                         while( lol < itera):
                             Rx = np.random.uniform(-1,1)
