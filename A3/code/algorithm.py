@@ -168,14 +168,14 @@ def propagation_and_random_search(source_patches, target_patches,
                         best_D[i,j] = d_set[(x,y)]
                     if(random_enabled):
                         # print("in random")
-                        count = 0
+                        lol = 0
 #                         itera = int(np.ceil(- np.log10(w)/ np.log10(alpha)))
 #                         print(itera)
-                        while(count < itera):
+                        while(lol < itera):
                             Rx = np.random.uniform(-1,1)
                             Ry = np.random.uniform(-1,1)
                             # u = f[i,j] + np.multiply(w*(alpha**lol),np.array(Rx,Ry))
-                            u = f[i,j] + [Rx*(w*(alpha**count)),Ry*(w*(alpha**count))]
+                            u = f[i,j] + [Rx*(w*(alpha**lol)),Ry*(w*(alpha**lol))]
                             # x,y = i + u[0], j+u[1]
                             if(within_dim((i + u[0], j+u[1]),target_patches)==False):
                                 x = i+u[0]
@@ -184,7 +184,7 @@ def propagation_and_random_search(source_patches, target_patches,
                                 if(new_score < best_D[i,j]):
                                     new_f[i,j] = u
                                     best_D[i,j] = new_score
-                            count = lol+1
+                            lol = lol+1
 #                         print(lol)
 
     # PS I had already coded the propgation part when I started working on random and relazied I need to loop again so added some extra variables
