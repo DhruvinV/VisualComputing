@@ -82,6 +82,7 @@ def propagation_and_random_search(source_patches, target_patches,
     ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
     #############################################
     # propagation
+    print(w)
     itera = int(np.ceil(- np.log10(w)/ np.log10(alpha)))
     source_patches[np.isnan(source_patches)] = 0
     target_patches[np.isnan(target_patches)] = 0
@@ -94,13 +95,11 @@ def propagation_and_random_search(source_patches, target_patches,
                     best_D[i,j] = np.linalg.norm(source_patches[i,j]-target_patches[i,j])
                     k+=1
     print(best_D.shape)
-    h_min,h_max,w_min,w_max,offsets = 0,0,0,0,1
-    if propagation_enabled:
-        if odd_iteration == True:
-            # print(best_D.shape)
-            # consider f(x-1,y),f(x,y-1)
-            for i in range(0,source_patches.shape[0]):
-                for j in range(0,source_patches.shape[1]):
+    if odd_iteration == True:
+        for i in range(0,source_patches.shape[0]):
+            # print(i)
+            for j in range(0,source_patches.shape[1]):
+                if propagation_enabled:
                     d_set = dict()
                     if(within_dim([i,j]+new_f[i,max(j-1,0)],source_patches) == False):
                         loc_in_B = [i,j]+new_f[i,max(j-1,0)]
@@ -119,33 +118,50 @@ def propagation_and_random_search(source_patches, target_patches,
                         # if(0<=x2<target)
                         new_f[i,j] = new_f[x,y]
                         best_D[i,j] = d_set[(x,y)]
+                if(random_enabled):
+                    # print(itera)?
+                    # print(type(itera))
+                    # k = int(itera)
+                    R = np.random.randint(-1,2,size=(int(itera),2))
+                    # print(R)
+                    size = w*alpha**np.arange(10)
+                    # print(itera)
+                    # print(R[5])
+                    u = np.multiply(np.transpose(R),size)
+                    # print(u.T)
+                    # print(u.T.shape)
+                    # u_i = np.array([3,4]) + u.
+                    u_i = f[i,j] + u.T
 
-                    if(random_enabled):
-                        # print("in random")
-                        lol = 0
-                        while( lol < itera):
-                            Rx = np.random.uniform(-1,1)
-                            Ry = np.random.uniform(-1,1)
-                            # print(alpha)
-                            # print((w*(alpha**lol)))
-                            u = f[i,j] + [Rx*(w*(alpha**lol)),Ry*(w*(alpha**lol))]
-                            if(within_dim((i+u[0], j+u[1]),target_patches)==False):
-                                x,y = i+u[0],j+u[1]
-                                # print(x,y)
-                                new_score = np.linalg.norm(source_patches[i,j]-target_patches[int(x),int(y)])
-                                if(new_score < best_D[i,j]):
-                                    new_f[i,j] = u
-                                    best_D[i,j] = new_score
-                            lol = lol+1
-            h_min,h_max,w_min,w_max,offsets = 0, source_patches[0],0,source_patches.shape[1],1
-    # if random_enab
-        else:
+                    # print(u_i.shape)
+                    # print(u_i)
+                    u_ik = [i,j] + u_i
+                    clipped_x = np.clip(u_ik[:,0],0,source_patches.shape[0]-1)
+                    clipped_y = np.clip(u_ik[:,1],0,source_patches.shape[1]-1)
+                    clipp = np.column_stack((clipped_x,clipped_y))
+                    clipp = clipp.astype(int)
+                    diff = source_patches[i,j].reshape((-1)) - target_patches[clipp[:,0],clipp[:,1]].reshape((-1,source_patches.shape[2]*source_patches.shape[3]))
+                    norm = np.apply_along_axis(np.linalg.norm, 1,diff)
+                    # print(u_i)
+                    clipped_x = np.clip(u_i[:,0],0,source_patches.shape[0]-1)
+                    clipped_y = np.clip(u_i[:,1],0,source_patches.shape[1]-1)
+                    clipp = np.column_stack((clipped_x,clipped_y))
+                    clipp = clipp.astype(int)
+                    # break
+                    min_minma = np.amax(norm)
+                    if(best_D[i,j]>min_minma):
+                        # print("true")
+                        best_D[i,j] = min_minma
+                        new_f[i,j] = clipp[np.argmax(norm)]
+                # break
+    else:
             # consider f(x+1,y),f(x,y+1)
-            h_min,h_max,w_min,w_max,offsets = source_patches.shape[0]-1,-1,source_patches.shape[1]-1,-1,-1
-            # examining the offsets in reverse scan order starting from bottom
-            # goint to top
-            for i in range(h_min,h_max,-1):
-                for j in range(w_min,w_max,-1):
+        h_min,h_max,w_min,w_max,offsets = source_patches.shape[0]-1,-1,source_patches.shape[1]-1,-1,-1
+        # examining the offsets in reverse scan order starting from bottom
+        # goint to top
+        for i in range(h_min,h_max,-1):
+            for j in range(w_min,w_max,-1):
+                if propagation_enabled:
                     d_set = dict()
                     # d_set[(min(i+1,h_min),j)] = best_D[min(i+1,h_min),j]
                     if(within_dim([i,j]+new_f[min(i+1,h_min),j],source_patches) == False):
@@ -166,29 +182,41 @@ def propagation_and_random_search(source_patches, target_patches,
                         # if(0<=x2<target)
                         new_f[i,j] = new_f[x,y]
                         best_D[i,j] = d_set[(x,y)]
-                    if(random_enabled):
-                        # print("in random")
-                        lol = 0
-#                         itera = int(np.ceil(- np.log10(w)/ np.log10(alpha)))
-#                         print(itera)
-                        while(lol < itera):
-                            Rx = np.random.uniform(-1,1)
-                            Ry = np.random.uniform(-1,1)
-                            # u = f[i,j] + np.multiply(w*(alpha**lol),np.array(Rx,Ry))
-                            u = f[i,j] + [Rx*(w*(alpha**lol)),Ry*(w*(alpha**lol))]
-                            # x,y = i + u[0], j+u[1]
-                            if(within_dim((i + u[0], j+u[1]),target_patches)==False):
-                                x = i+u[0]
-                                y = j+u[1]
-                                new_score = np.linalg.norm(source_patches[i,j]-target_patches[int(x),int(y)])
-                                if(new_score < best_D[i,j]):
-                                    new_f[i,j] = u
-                                    best_D[i,j] = new_score
-                            lol = lol+1
-#                         print(lol)
-
-    # PS I had already coded the propgation part when I started working on random and relazied I need to loop again so added some extra variables
-    #############################################
+                if(random_enabled):
+                    # print("in random")
+                    R = np.random.randint(-1,2,size=(int(itera),2))
+                    # print(R)
+                    size = w*alpha**np.arange(10)
+                    # print(itera)
+                    u = np.multiply(np.transpose(R),size)
+                    # print(u.T)
+                    # print(u.T.shape)
+                    # u_i = np.array([3,4]) + u.T
+                    u_i = f[i,j] + u.T
+                    # print(u_i.shape)
+                    # print(u_i)
+                    u_ik = [i,j] + u_i
+                    clipped_x = np.clip(u_ik[:,0],0,source_patches.shape[0]-1)
+                    clipped_y = np.clip(u_ik[:,1],0,source_patches.shape[1]-1)
+                    clipp = np.column_stack((clipped_x,clipped_y))
+                    clipp = clipp.astype(int)
+                    # print(clipp.shape)
+                    # print(clipp[:,0])
+                    # print(target_patches[clipp[:,0],clipp[:,1]].reshape((-1,source_patches.shape[2]*source_patches.shape[3])))
+                    diff = source_patches[i,j].reshape((-1)) - target_patches[clipp[:,0],clipp[:,1]].reshape((-1,source_patches.shape[2]*source_patches.shape[3]))
+                    # norm = np.linalg.norm(diff)
+                    # print(source_patches[i,j].reshape((-1)).shape)
+                    clipped_x = np.clip(u_i[:,0],0,source_patches.shape[0]-1)
+                    clipped_y = np.clip(u_i[:,1],0,source_patches.shape[1]-1)
+                    clipp = np.column_stack((clipped_x,clipped_y))
+                    norm = np.apply_along_axis(np.linalg.norm, 1,diff)
+                    min_minma = np.amax(norm)
+                    # print(best_D[i,j]>min_minma)
+                    if(best_D[i,j]>min_minma):
+                        best_D[i,j] = min_minma
+                        # print(u_i[np.argmin(norm)])
+                        # print(np.argmin(norm))
+                        new_f[i,j] = clipp[np.argmax(norm)]
     return new_f, best_D, global_vars
 
 def get_key_from_dict(some_dict):
@@ -223,17 +251,15 @@ def within_dim(x,y):
 # as this would be very inefficient
 
 def reconstruct_source_from_target(target, f):
-    rec_source = None
 
-
-    #############################################
+    #########################1####################
     ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
     #############################################
-    coord = make_coordinates_matrix(target.shape)
-    rec_source = target[coord[:,:,0]+f[:,:,0],coord[:,:,1]+f[:,:,1]]
+    y = make_coordinates_matrix(target.shape)
+    result = target[y[:,:,0]+f[:,:,0],y[:,:,1]+f[:,:,1]]
     #############################################
 
-    return rec_source
+    return result
 
 
 # This function takes an NxM image with C color channels and a patch size P
