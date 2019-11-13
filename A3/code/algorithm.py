@@ -113,8 +113,6 @@ def propagation_and_random_search(source_patches, target_patches,
                     d_set[(i,j)] = best_D[i,j]
                     (x,y) = get_key_from_dict(d_set)
                     if((x,y)!=(i,j)):
-                    #     continue
-                    # else:
                         # if(0<=x2<target)
                         new_f[i,j] = new_f[x,y]
                         best_D[i,j] = d_set[(x,y)]
@@ -213,10 +211,6 @@ def propagation_and_random_search(source_patches, target_patches,
                     # print(target_patches[clipp[:,0],clipp[:,1]].reshape((-1,source_patches.shape[2]*source_patches.shape[3])))
                     diff = source_patches[i,j].reshape((-1)) - target_patches[clipp[:,0],clipp[:,1]].reshape((-1,source_patches.shape[2]*source_patches.shape[3]))
                     # norm = np.linalg.norm(diff)
-                    # print(source_patches[i,j].reshape((-1)).shape)
-                    clipped_x = np.clip(u_i[:,0],0,source_patches.shape[0]-1)
-                    clipped_y = np.clip(u_i[:,1],0,source_patches.shape[1]-1)
-                    clipp = np.column_stack((clipped_x,clipped_y))
                     norm = np.apply_along_axis(np.linalg.norm, 1,diff)
                     min_minma = np.amin(norm)
                     # print(best_D[i,j]>min_minma)
