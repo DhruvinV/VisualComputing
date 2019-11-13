@@ -145,13 +145,13 @@ def propagation_and_random_search(source_patches, target_patches,
                     print(np.linalg.norm(diff[0]))
                     norm = np.apply_along_axis(np.linalg.norm, 1,diff)
                     print(norm[0])
-                    sys.exit()
                     # print(u_i)
+                    print(u_i.shape)
+                    sys.exit()
                     clipped_x = np.clip(u_i[:,0],0,source_patches.shape[0]-1)
                     clipped_y = np.clip(u_i[:,1],0,source_patches.shape[1]-1)
                     clipp = np.column_stack((clipped_x,clipped_y))
                     clipp = clipp.astype(int)
-                    # break
                     min_minma = np.amin(norm)
                     if(best_D[i,j]>min_minma):
                         # print("true")
