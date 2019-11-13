@@ -143,14 +143,14 @@ def propagation_and_random_search(source_patches, target_patches,
             for j in range(w_min,w_max,-1):
                 if propagation_enabled:
                     d_set = dict()
-                    if(within_dim([i,j]+new_f[min(i+1,h_min),j],source_patches) == False):
-                        loc_in_B = [i,j]+new_f[min(i+1,h_min),j]
+                    if(within_dim([i,j]+new_f[min(i+1,w_min),j],source_patches) == False):
+                        loc_in_B = [i,j]+new_f[min(i+1,w_min),j]
                         new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
-                        d_set[(min(i+1,h_min),j)] = new_score
-                    if(within_dim([i,j]+new_f[i,min(j+1,w_min)],source_patches) == False):
-                        loc_in_B = [i,j]+new_f[i,min(j+1,w_min)]
+                        d_set[(min(i+1,w_min),j)] = new_score
+                    if(within_dim([i,j]+new_f[i,min(j+1,h_min)],source_patches) == False):
+                        loc_in_B = [i,j]+new_f[i,min(j+1,h_min)]
                         new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
-                        d_set[(i,min(j+1,w_min))] = new_score
+                        d_set[(i,min(j+1,h_min))] = new_score
                     d_set[(i,j)] = best_D[i,j]
                     (x,y) = get_key_from_dict(d_set)
                     if((x,y)!=(i,j)):
