@@ -148,11 +148,11 @@ def propagation_and_random_search(source_patches, target_patches,
                     clipp = np.column_stack((clipped_x,clipped_y))
                     clipp = clipp.astype(int)
                     # break
-                    min_minma = np.amax(norm)
+                    min_minma = np.amin(norm)
                     if(best_D[i,j]>min_minma):
                         # print("true")
                         best_D[i,j] = min_minma
-                        new_f[i,j] = clipp[np.argmax(norm)]
+                        new_f[i,j] = clipp[np.argmin(norm)]
                 # break
     else:
             # consider f(x+1,y),f(x,y+1)
@@ -210,13 +210,13 @@ def propagation_and_random_search(source_patches, target_patches,
                     clipped_y = np.clip(u_i[:,1],0,source_patches.shape[1]-1)
                     clipp = np.column_stack((clipped_x,clipped_y))
                     norm = np.apply_along_axis(np.linalg.norm, 1,diff)
-                    min_minma = np.amax(norm)
+                    min_minma = np.amin(norm)
                     # print(best_D[i,j]>min_minma)
                     if(best_D[i,j]>min_minma):
                         best_D[i,j] = min_minma
                         # print(u_i[np.argmin(norm)])
                         # print(np.argmin(norm))
-                        new_f[i,j] = clipp[np.argmax(norm)]
+                        new_f[i,j] = clipp[np.argmin(norm)]
     return new_f, best_D, global_vars
 
 def get_key_from_dict(some_dict):
