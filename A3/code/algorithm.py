@@ -132,7 +132,6 @@ def propagation_and_random_search(source_patches, target_patches,
                     # print(u.T.shape)
                     # u_i = np.array([3,4]) + u.
                     u_i = f[i,j] + u.T
-
                     # print(u_i.shape)
                     # print(u_i)
                     u_ik = [i,j] + u_i
