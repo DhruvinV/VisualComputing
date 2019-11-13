@@ -112,9 +112,9 @@ def propagation_and_random_search(source_patches, target_patches,
                         d_set[(max(i-1,0),j)] = new_score
                     d_set[(i,j)] = best_D[i,j]
                     (x,y) = get_key_from_dict(d_set)
-                    if((x,y)==(i,j)):
-                        continue
-                    else:
+                    if((x,y)!=(i,j)):
+                    #     continue
+                    # else:
                         # if(0<=x2<target)
                         new_f[i,j] = new_f[x,y]
                         best_D[i,j] = d_set[(x,y)]
@@ -184,9 +184,9 @@ def propagation_and_random_search(source_patches, target_patches,
                      # d_set[(i,j)] = best_D[i,j]
                     d_set[(i,j)] = best_D[i,j]
                     (x,y) = get_key_from_dict(d_set)
-                    if((x,y)==(i,j)):
-                        continue
-                    else:
+                    if((x,y)!=(i,j)):
+                        # continue
+                    # else:
                         # if(0<=x2<target)
                         new_f[i,j] = new_f[x,y]
                         best_D[i,j] = d_set[(x,y)]
