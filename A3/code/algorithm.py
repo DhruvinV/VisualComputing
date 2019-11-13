@@ -149,6 +149,7 @@ def propagation_and_random_search(source_patches, target_patches,
                     # clipped_y = np.clip(u_i[:,1],0,source_patches.shape[1]-1)
                     clipp = np.column_stack((clipped_x,clipped_y))
                     clipp = clipp.astype(int)
+                    print(norm.shape)
                     print(norm)
                     min_minma = np.amin(norm)
                     print(min_minma)
