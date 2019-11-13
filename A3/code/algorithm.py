@@ -97,7 +97,7 @@ def propagation_and_random_search(source_patches, target_patches,
     print(best_D.shape)
     if odd_iteration == True:
         for i in range(0,source_patches.shape[0]):
-            # print(i)
+            print(i)
             for j in range(0,source_patches.shape[1]):
                 if propagation_enabled:
                     d_set = dict()
@@ -140,23 +140,25 @@ def propagation_and_random_search(source_patches, target_patches,
                     clipp = np.column_stack((clipped_x,clipped_y))
                     clipp = clipp.astype(int)
                     diff = source_patches[i,j].reshape((-1)) - target_patches[clipp[:,0],clipp[:,1]].reshape((-1,source_patches.shape[2]*source_patches.shape[3]))
-                    print(diff[0])
+                    # print(diff[0])
                     print(np.linalg.norm(diff[0]))
                     norm = np.apply_along_axis(np.linalg.norm, 1,diff)
-                    print(norm[0])
+                    # print(norm[0])
                     # print(u_i)
-                    print(u_i.shape)
-                    sys.exit()
+
                     clipped_x = np.clip(u_i[:,0],0,source_patches.shape[0]-1)
                     clipped_y = np.clip(u_i[:,1],0,source_patches.shape[1]-1)
                     clipp = np.column_stack((clipped_x,clipped_y))
                     clipp = clipp.astype(int)
                     min_minma = np.amin(norm)
+                    # print(u_i.shape)
+                    # sys.exit()
                     if(best_D[i,j]>min_minma):
                         # print("true")
                         best_D[i,j] = min_minma
-                        new_f[i,j] = clipp[np.argmin(norm)]
-                break
+                        new_f[i,j,0] = clipped_x[np.argmin(norm)]
+                        new_f[i,j,1] = clipped_y[np.argmin(norm)]
+                # break
     else:
             # consider f(x+1,y),f(x,y+1)
         h_min,h_max,w_min,w_max,offsets = source_patches.shape[0]-1,-1,source_patches.shape[1]-1,-1,-1
