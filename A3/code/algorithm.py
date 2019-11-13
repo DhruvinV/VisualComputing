@@ -147,7 +147,7 @@ def propagation_and_random_search(source_patches, target_patches,
                     # print(u_i)
 
                     clipped_x = np.clip(u_i[:,0],0,source_patches.shape[0]-1)
-                    clipped_y = np.clip(u_i[:,1],0,source_patches.shape[1]-1)
+                    # clipped_y = np.clip(u_i[:,1],0,source_patches.shape[1]-1)
                     clipp = np.column_stack((clipped_x,clipped_y))
                     clipp = clipp.astype(int)
                     min_minma = np.amin(norm)
@@ -156,8 +156,8 @@ def propagation_and_random_search(source_patches, target_patches,
                     if(best_D[i,j]>min_minma):
                         # print("true")
                         best_D[i,j] = min_minma
-                        new_f[i,j,0] = clipped_x[np.argmin(norm)]
-                        new_f[i,j,1] = clipped_y[np.argmin(norm)]
+                        new_f[i,j,0] = clipped_x[np.argmin(norm)] - i
+                        new_f[i,j,1] = clipped_y[np.argmin(norm)] - j
                 # break
     else:
             # consider f(x+1,y),f(x,y+1)
