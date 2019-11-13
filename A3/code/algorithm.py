@@ -141,7 +141,7 @@ def propagation_and_random_search(source_patches, target_patches,
                     clipp = np.column_stack((clipped_x,clipped_y))
                     clipp = clipp.astype(int)
                     diff = source_patches[i,j].reshape((-1)) - target_patches[clipp[:,0],clipp[:,1]].reshape((-1,source_patches.shape[2]*source_patches.shape[3]))
-                    print(target_patches[clipp[:,0],clipp[:,1]].reshape((-1,source_patches.shape[2]*source_patches.shape[3])).shape)
+                    print(diff.shape)
                     norm = np.apply_along_axis(np.linalg.norm, 1,diff)
                     # print(u_i)
                     clipped_x = np.clip(u_i[:,0],0,source_patches.shape[0]-1)
