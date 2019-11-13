@@ -95,84 +95,84 @@ def propagation_and_random_search(source_patches, target_patches,
                     best_D[i,j] = np.linalg.norm(source_patches[i,j]-target_patches[i,j])
                     k+=1
     print(best_D.shape)
-    if odd_iteration == True:
-        for i in range(0,source_patches.shape[0]):
-            print(i)
-            for j in range(0,source_patches.shape[1]):
-                if propagation_enabled:
-                    d_set = dict()
-                    if(within_dim([i,j]+new_f[i,max(j-1,0)],source_patches) == False):
-                        loc_in_B = [i,j]+new_f[i,max(j-1,0)]
-                        new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
-                        d_set[(i,max(j-1,0))] = new_score
-                    # d_set[(i,max(j-1,0))] = best_D[i,max(j-1,0)]
-                    if(within_dim([i,j]+new_f[max(i-1, 0), j],source_patches) == False):
-                        loc_in_B = [i,j]+new_f[max(i-1, 0), j]
-                        new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
-                        d_set[(max(i-1,0),j)] = new_score
-                    d_set[(i,j)] = best_D[i,j]
-                    (x,y) = get_key_from_dict(d_set)
-                    if((x,y)!=(i,j)):
-                        # if(0<=x2<target)
-                        new_f[i,j] = new_f[x,y]
-                        best_D[i,j] = d_set[(x,y)]
-                if(random_enabled):
-                    R = np.random.randint(-1,2,size=(int(itera),2))
-                    size = w*alpha**np.arange(10)
-                    u = np.multiply(np.transpose(R),size)
-                    u_i = f[i,j] + u.T
-                    u_ik = [i,j] + u_i
-                    clipped_x = np.clip(u_ik[:,0],0,source_patches.shape[0]-1)
-                    clipped_y = np.clip(u_ik[:,1],0,source_patches.shape[1]-1)
-                    clipp = np.column_stack((clipped_x,clipped_y))
-                    clipp = clipp.astype(int)
-                    diff = source_patches[i,j].reshape((-1)) - target_patches[clipp[:,0],clipp[:,1]].reshape((-1,source_patches.shape[2]*source_patches.shape[3]))
-                    norm = np.apply_along_axis(np.linalg.norm, 1,diff)
-                    min_minma = np.amin(norm)
-                    if(best_D[i,j]>min_minma):
-                        best_D[i,j] = min_minma
-                        new_f[i,j,0] = clipped_x[np.argmin(norm)] - i
-                        new_f[i,j,1] = clipped_y[np.argmin(norm)] - j
-                # break
-    else:
+    # if odd_iteration == True:
+    #     for i in range(0,source_patches.shape[0]):
+    #         print(i)
+    #         for j in range(0,source_patches.shape[1]):
+    #             if propagation_enabled:
+    #                 d_set = dict()
+    #                 if(within_dim([i,j]+new_f[i,max(j-1,0)],source_patches) == False):
+    #                     loc_in_B = [i,j]+new_f[i,max(j-1,0)]
+    #                     new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
+    #                     d_set[(i,max(j-1,0))] = new_score
+    #                 # d_set[(i,max(j-1,0))] = best_D[i,max(j-1,0)]
+    #                 if(within_dim([i,j]+new_f[max(i-1, 0), j],source_patches) == False):
+    #                     loc_in_B = [i,j]+new_f[max(i-1, 0), j]
+    #                     new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
+    #                     d_set[(max(i-1,0),j)] = new_score
+    #                 d_set[(i,j)] = best_D[i,j]
+    #                 (x,y) = get_key_from_dict(d_set)
+    #                 if((x,y)!=(i,j)):
+    #                     # if(0<=x2<target)
+    #                     new_f[i,j] = new_f[x,y]
+    #                     best_D[i,j] = d_set[(x,y)]
+    #             if(random_enabled):
+    #                 R = np.random.randint(-1,2,size=(int(itera),2))
+    #                 size = w*alpha**np.arange(10)
+    #                 u = np.multiply(np.transpose(R),size)
+    #                 u_i = f[i,j] + u.T
+    #                 u_ik = [i,j] + u_i
+    #                 clipped_x = np.clip(u_ik[:,0],0,source_patches.shape[0]-1)
+    #                 clipped_y = np.clip(u_ik[:,1],0,source_patches.shape[1]-1)
+    #                 clipp = np.column_stack((clipped_x,clipped_y))
+    #                 clipp = clipp.astype(int)
+    #                 diff = source_patches[i,j].reshape((-1)) - target_patches[clipp[:,0],clipp[:,1]].reshape((-1,source_patches.shape[2]*source_patches.shape[3]))
+    #                 norm = np.apply_along_axis(np.linalg.norm, 1,diff)
+    #                 min_minma = np.amin(norm)
+    #                 if(best_D[i,j]>min_minma):
+    #                     best_D[i,j] = min_minma
+    #                     new_f[i,j,0] = clipped_x[np.argmin(norm)] - i
+    #                     new_f[i,j,1] = clipped_y[np.argmin(norm)] - j
+    #             # break
+    # else:
             # consider f(x+1,y),f(x,y+1)
-        h_min,h_max,w_min,w_max,offsets = source_patches.shape[0]-1,-1,source_patches.shape[1]-1,-1,-1
-        # examining the offsets in reverse scan order starting from bottom
-        # goint to top
-        for i in range(h_min,h_max,-1):
-            for j in range(w_min,w_max,-1):
-                if propagation_enabled:
-                    d_set = dict()
-                    if(within_dim([i,j]+new_f[min(i+1,w_min),j],source_patches) == False):
-                        loc_in_B = [i,j]+new_f[min(i+1,w_min),j]
-                        new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
-                        d_set[(min(i+1,w_min),j)] = new_score
-                    if(within_dim([i,j]+new_f[i,min(j+1,h_min)],source_patches) == False):
-                        loc_in_B = [i,j]+new_f[i,min(j+1,h_min)]
-                        new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
-                        d_set[(i,min(j+1,h_min))] = new_score
-                    d_set[(i,j)] = best_D[i,j]
-                    (x,y) = get_key_from_dict(d_set)
-                    if((x,y)!=(i,j)):
-                        new_f[i,j] = new_f[x,y]
-                        best_D[i,j] = d_set[(x,y)]
-                if(random_enabled):
-                    R = np.random.randint(-1,2,size=(int(itera),2))
-                    size = w*alpha**np.arange(10)
-                    u = np.multiply(np.transpose(R),size)
-                    u_i = f[i,j] + u.T
-                    u_ik = [i,j] + u_i
-                    clipped_x = np.clip(u_ik[:,0],0,source_patches.shape[0]-1)
-                    clipped_y = np.clip(u_ik[:,1],0,source_patches.shape[1]-1)
-                    clipp = np.column_stack((clipped_x,clipped_y))
-                    clipp = clipp.astype(int)
-                    diff = source_patches[i,j].reshape((-1)) - target_patches[clipp[:,0],clipp[:,1]].reshape((-1,source_patches.shape[2]*source_patches.shape[3]))
-                    norm = np.apply_along_axis(np.linalg.norm, 1,diff)
-                    min_minma = np.amin(norm)
-                    if(best_D[i,j]>min_minma):
-                        best_D[i,j] = min_minma
-                        new_f[i,j,0] = clipped_x[np.argmin(norm)] - i
-                        new_f[i,j,1] = clipped_y[np.argmin(norm)] - j
+    h_min,w_min,offsets = source_patches.shape[0]-1,source_patches.shape[1]-1,-1
+    # examining the offsets in reverse scan order starting from bottom
+    # goint to top
+    for i in range(w_min,-1,-1):
+        for j in range(h_min,-1,-1):
+            if propagation_enabled:
+                d_set = dict()
+                if(within_dim([i,j]+new_f[min(i+1,w_min),j],source_patches) == False):
+                    loc_in_B = [i,j]+new_f[min(i+1,w_min),j]
+                    new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
+                    d_set[(min(i+1,w_min),j)] = new_score
+                if(within_dim([i,j]+new_f[i,min(j+1,h_min)],source_patches) == False):
+                    loc_in_B = [i,j]+new_f[i,min(j+1,h_min)]
+                    new_score = np.linalg.norm(source_patches[i,j]-target_patches[loc_in_B[0],loc_in_B[1]])
+                    d_set[(i,min(j+1,h_min))] = new_score
+                d_set[(i,j)] = best_D[i,j]
+                (x,y) = get_key_from_dict(d_set)
+                if((x,y)!=(i,j)):
+                    new_f[i,j] = new_f[x,y]
+                    best_D[i,j] = d_set[(x,y)]
+            if(random_enabled):
+                R = np.random.randint(-1,2,size=(int(itera),2))
+                size = w*alpha**np.arange(10)
+                u = np.multiply(np.transpose(R),size)
+                u_i = f[i,j] + u.T
+                u_ik = [i,j] + u_i
+                clipped_x = np.clip(u_ik[:,0],0,source_patches.shape[0]-1)
+                clipped_y = np.clip(u_ik[:,1],0,source_patches.shape[1]-1)
+                clipp = np.column_stack((clipped_x,clipped_y))
+                clipp = clipp.astype(int)
+                diff = source_patches[i,j].reshape((-1)) - target_patches[clipp[:,0],clipp[:,1]].reshape((-1,source_patches.shape[2]*source_patches.shape[3]))
+                norm = np.apply_along_axis(np.linalg.norm, 1,diff)
+                min_minma = np.amin(norm)
+                if(best_D[i,j]>min_minma):
+                    best_D[i,j] = min_minma
+                    new_f[i,j,0] = clipped_x[np.argmin(norm)] - i
+                    new_f[i,j,1] = clipped_y[np.argmin(norm)] - j
     return new_f, best_D, global_vars
 
 def get_key_from_dict(some_dict):
