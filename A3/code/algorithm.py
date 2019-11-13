@@ -139,8 +139,8 @@ def propagation_and_random_search(source_patches, target_patches,
     h_min,w_min,offsets = source_patches.shape[0]-1,source_patches.shape[1]-1,-1
     # examining the offsets in reverse scan order starting from bottom
     # goint to top
-    for i in range(w_min,-1,-1):
-        for j in range(h_min,-1,-1):
+    for i in range(h_min,-1,-1):
+        for j in range(w_min,-1,-1):
             if propagation_enabled:
                 d_set = dict()
                 if(within_dim([i,j]+new_f[min(i+1,w_min),j],source_patches) == False):
