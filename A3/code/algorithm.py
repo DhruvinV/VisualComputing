@@ -118,7 +118,7 @@ def propagation_and_random_search(source_patches, target_patches,
                         best_D[i,j] = d_set[(x,y)]
                 if(random_enabled):
                     R = np.random.randint(-1,2,size=(int(itera),2))
-                    size = w*alpha**np.arange(10)
+                    size = w*alpha**np.arange(int(itera))
                     u = np.multiply(np.transpose(R),size)
                     u_i = f[i,j] + u.T
                     u_ik = [i,j] + u_i
@@ -158,7 +158,7 @@ def propagation_and_random_search(source_patches, target_patches,
                         best_D[i,j] = d_set[(x,y)]
                 if(random_enabled):
                     R = np.random.randint(-1,2,size=(int(itera),2))
-                    size = w*alpha**np.arange(10)
+                    size = w*alpha**np.arange(int(itera))
                     u = np.multiply(np.transpose(R),size)
                     u_i = f[i,j] + u.T
                     u_ik = [i,j] + u_i
