@@ -1,0 +1,53 @@
+wolf> python viscomp.py --nlm --nlm_h 25 --k 4 --partial-results --rec-source --nnf-image --nnf-vectors --nnf-line-color r --iters 3 --patch-size 7 --alpha 0.5 --source ../test_images/jaguar2/source_noise2.png --target ../test_images/jaguar2/source_noise2.png --output ../results/jaguar2/jaguar2
+-----------------------------------------------------------------
+PatchMatch parameters:
+        Initial NNF:            Generated internally
+        Iterations:             3
+        Patch size:             7
+        NLM h:                  25.0
+        Alpha:                  0.5
+        W:                      630
+        K:                      4
+        Run NLM algorithm:      True
+        Propagation enabled:    True
+        Random search enabled:  True
+Output path and base filename:  ../results/jaguar2/jaguar2
+Visualization parameters:
+        Output files:           correspondences, color nnf, rec'd source 
+        NNF subsampling:        100
+        NNF line width:         0.5
+        NNF line color:         r
+        Matplotlib server mode: False
+        Tmp directory:          ./
+-----------------------------------------------------------------
+Running iteration 1...
+        Function _propagation_and_random_search_k ran 116.5263
+Median D =  25.0
+        Function _run_nlm ran 5.6747
+        Function _reconstruct_source ran 0.0282
+        Function _reconstruct_source ran 0.0238
+        Function _reconstruct_source ran 0.0326
+        Function _reconstruct_source ran 0.0269
+Running iteration 2...
+        Function _propagation_and_random_search_k ran 113.2514
+Median D =  22.0
+        Function _run_nlm ran 5.8894
+        Function _reconstruct_source ran 0.0205
+        Function _reconstruct_source ran 0.0209
+        Function _reconstruct_source ran 0.0206
+        Function _reconstruct_source ran 0.0208
+Running iteration 3...
+        Function _propagation_and_random_search_k ran 109.3111
+Median D =  22.0
+        Function _run_nlm ran 6.1282
+        Function _reconstruct_source ran 0.0224
+        Function _reconstruct_source ran 0.0251
+        Function _reconstruct_source ran 0.0203
+        Function _reconstruct_source ran 0.0211
+Median D =  22.0
+        Function _run_nlm ran 5.6766
+        Function _reconstruct_source ran 0.0195
+        Function _reconstruct_source ran 0.0212
+        Function _reconstruct_source ran 0.0213
+        Function _reconstruct_source ran 0.0236
+Done.

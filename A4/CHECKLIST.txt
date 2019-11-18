@@ -1,0 +1,63 @@
+-------------------------------------
+Assignment 4 Checklist/Grading sheet
+-------------------------------------
+
+Name: 
+Student ID:
+
+(If collaborated)
+Name: 
+Student ID:
+
+------------------------------------------------------------------------------
+A. PLEASE ANSWER THE FOLLOWING QUESTIONS (YOUR ASSIGNMENT WILL NOT BE MARKED
+   IF THEY ARE NOT ANSWERED)
+
+  
+1. I verify that my submission adheres to the Academic Honesty policy 
+   stated in "policy.pdf"
+
+   ___Yes   ___No
+
+2. I copied, modified, re-wrote, or re-purposed source code that was not 
+   originally written by me (in Python, Java, C++ or any other programming 
+   language). 
+
+   ___Yes   ___No
+      
+   If you checked yes, please supply the following
+   
+      - URL(s) to the original source code:
+
+      - Portion(s) of the assignment aided by that code (refer to
+        checklist below):
+
+      - If original source code is not your A3, please supply author name(s) if known:
+
+      
+3. This assignment was done individually
+
+   ___Yes   ___No
+
+
+------------------------------------------------------------------------------
+B. PLACE AN (X) IN FRONT OF PORTIONS OF THE ASSIGNMENT THAT YOU COMPLETED IN 
+   FULL.
+   
+   If a portion of the assignment was not completed fully, please provide 
+   additional information so that we can determine whether or not you are 
+   eligible for partial credit. THE MORE INFORMATION YOU SUPPLY (EG. METHOD 
+   WHICH CONTAINS PARTIAL CODE, SUGGESTIONS ON WHERE AND WHAT TO LOOK FOR IN 
+   YOUR PARTIAL IMPLEMENTATION, DETAILED COMMENTS IN YOUR CODE, ETC) THE MORE 
+   LIKELY IT IS WE WILL BE ABLE TO MAKE AN ACCURATE ASSESSMENT
+
+___   ( 25 marks) Part 1.1    propagation_and_random_search_k() 
+___   ( 15 marks) Part 1.2    ___ (8 marks) NNF_matrix_to_NNF_heap
+			      ___ (7 marks) NNF_heap_to_NNF_matrix
+
+___   ( 10 marks) Part 2      nlm()
+
+___   ( 50 marks) Part 4      PDF report & evaluation
+
+
+------------------------------------------------------------------------------ 
