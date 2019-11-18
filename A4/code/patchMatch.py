@@ -129,8 +129,11 @@ class PatchMatch:
 
         # COPY INTO THIS SPACE YOUR IMPLEMENTATION OF THIS FUNCTION
         # FROM YOUR algorithm.py of A1-Part A
-
-
+        read = cv.imread(filename)
+        if read is not None:
+            self._images[key] = read.astype(np.uint8)
+            print(key,self._images[key].shape)
+            return True, "Image read success"
         #########################################
         return success, msg
 
@@ -143,12 +146,13 @@ class PatchMatch:
     def write_image(self, filename, key):
         success = False
         msg = 'No Image Available'
-
         #########################################
         ## PLACE YOUR CODE BETWEEN THESE LINES ##
         #########################################
-
-
+        read = np.round(self._images[key])
+        write = cv.imwrite(filename,read.astype(np.uint8))
+        if(write):
+            return True,"Write Successful"
         #########################################
         return success, msg
 
@@ -261,7 +265,7 @@ class PatchMatch:
             for order in range(0, self._k):
 
                 # get the nearest neighbour field f corresponding to the the n-th best
-                # neighbour (where n = order) 
+                # neighbour (where n = order)
                 # write the output files
                 if self.NNF_image():
                     self._images['NNF-image'] = create_NNF_image(self._f_k[order])
@@ -457,7 +461,7 @@ class PatchMatch:
 
     def NNF_k(self):
         return self._f_k
-        
+
     def NNF_heap(self):
         return self._f_heap
 

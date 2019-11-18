@@ -20,7 +20,7 @@ from itertools import count
 _tiebreaker = count()
 
 from copy import deepcopy as copy
-
+import sys
 # basic numpy configuration
 
 # set random seed
@@ -143,12 +143,23 @@ def NNF_matrix_to_NNF_heap(source_patches, target_patches, f_k):
     f_coord_dictionary = None
 
     #############################################
-    ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
+    ###PLACEYOURCODEBETWEEN THESE LINES  ###
     #############################################
+    print(source_patches.shape)
+    print(target_patches.shape)
+    print(f_k.shape)
+    f_heap,f_coord_dictionary = list(),list()
+    for i in range(source_patches.shape[0]):
+        f_heap.append([])
+        f_coord_dictionary.append([])
+        for j in range(source_patches.shape[1]):
+            col = []
+            dict = []
+            for k in range(f_k.shape[0]):
+                
 
-
+    sys.exit()
     #############################################
-
     return f_heap, f_coord_dictionary
 
 
