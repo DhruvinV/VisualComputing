@@ -145,21 +145,20 @@ def NNF_matrix_to_NNF_heap(source_patches, target_patches, f_k):
     #############################################
     ###PLACEYOURCODEBETWEEN THESE LINES  ###
     #############################################
-    print(source_patches.shape)
-    print(target_patches.shape)
-    print(f_k.shape)
-    f_heap,f_coord_dictionary = list(),list()
+    heap,coord_dict = np.zeros((source_patches.shape[0:2])),np.zeros((source_patches.shape[0:2]))
+    f_heap,f_coord_dictionary = heap.tolist(),coord_dict.tolist()
     for i in range(source_patches.shape[0]):
-        f_heap.append([])
-        f_coord_dictionary.append([])
         for j in range(source_patches.shape[1]):
-            col = []
-            dict = []
+            f_heap[i][j] = []
+            f_coord_dictionary[i][j] = {}
             for k in range(f_k.shape[0]):
-                
-
-    sys.exit()
+                f_coord_dictionary[i][j][(f_k[k,i,j,0],f_k[k,i,j,1])] = None
+                one = np.linalg.norm(source_patches[i,j]-target_patches[(i+f_k[k,i,j,0]),(j+f_k[k,i,j,1])])
+                two = _tiebreaker.next()
+                three =  f_k[k,i,j]
+                heappush(f_heap[i][j],(one,two,three))
     #############################################
+    # NNF_heap_to_NNF_matrix(f_heap)
     return f_heap, f_coord_dictionary
 
 
@@ -183,10 +182,17 @@ def NNF_heap_to_NNF_matrix(f_heap):
     #############################################
     ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
     #############################################
-
-
-    #############################################
-
+    n,m,k = len(f_heap),len(f_heap[1]),len(f_heap[0][1])
+    f_k,D_k = np.zeros((k,n,m,2),dtype=int),np.zeros((k,n,m))
+    for i in range(n):
+        for j in range(m):
+            n_larges = nlargest(k,f_heap[i][j])
+            # print(n_larges)
+            # sys.exit()
+            for k in range(k):
+                f_k[k,i,j] = n_larges[k][2]
+                D_k[k,i,j] = n_larges[k][0]
+    ##############################################
     return f_k, D_k
 
 
