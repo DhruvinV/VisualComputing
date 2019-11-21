@@ -80,23 +80,92 @@ np.seterr(divide='ignore', invalid='ignore')
 #           explicitly returned as arguments to the function
 
 
-def propagation_and_random_search_k(source_patches, target_patches,
-                                    f_heap,
-                                    f_coord_dictionary,
-                                    alpha, w,
-                                    propagation_enabled, random_enabled,
-                                    odd_iteration,
-                                    global_vars
-                                    ):
+def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coord_dictionary,alpha, w,propagation_enabled, random_enabled,odd_iteration,global_vars):
+
 
     #################################################
     ###  PLACE YOUR A3 CODE BETWEEN THESE LINES   ###
     ###  THEN START MODIFYING IT AFTER YOU'VE     ###
     ###  IMPLEMENTED THE 2 HELPER FUNCTIONS BELOW ###
     #################################################
+    print(len(f_heap))
+    # sys.exit()
+    # #############################################
+    # ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
+    # #############################################
+    # # propagation    itera = int(np.ceil(- np.log10(w)/ np.log10(alpha)))
+    source_patches[np.isnan(source_patches)] = 0
+    target_patches[np.isnan(target_patches)] = 0
+    k = len(f_heap[0][0])
+    N = source_patches.shape[0]
+    M = source_patches.shape[1]
 
+    if random_enabled:
+        import math
+        random_len = int(np.ceil(math.log(1.0 / w, alpha)))
+        alphalist = []
+        for i in range(random_len):
+            alphalist.extend([np.power(alpha, i)] * k)
+        alphalist = np.array(alphalist).reshape(random_len * k, 1)
 
-    #############################################
+    if odd_iteration == True:
+        for i in range(0,source_patches.shape[0]):
+            for j in range(0,source_patches.shape[1]):
+                if propagation_enabled:
+                    # d_set = dict()
+                    for h in f_heap[i][max(j-1,0)]:
+                        # print([i+h[2][0],j+h[2][1]])
+                        # print(h[2] in f_coord_dictionary[i][j])
+                        if(within_dim([i+h[2][0],j+h[2][1]],source_patches) and (h[2] not in f_coord_dictionary[i][j])):
+                            # replace the patch with adjacent patch.
+                            loc_in_B = [i+h[2][0],j+h[2][1]]
+                            # print(loc_in_B, i, j, within_dim([i+h[2][0],j+h[2][1]],source_patches))
+                            one = np.linalg.norm(source_patches[i,j] - target_patches[loc_in_B[0],loc_in_B[1]])
+                            two = _tiebreaker.next()
+                            three = h[2]
+                            # print(type(three),len(t))
+                            # since we are replacing the worst one with this patch. Just push and pop.
+                            set_none = heappushpop(f_heap[i][j],(one,two,three))
+                            f_coord_dictionary[i][j].pop(set_none[2],0)
+                    for h in f_heap[max(i-1, 0)][j]:
+                        if(within_dim([i+h[2][0],j+h[2][1]],source_patches) and (h[2] not in f_coord_dictionary[i][j])):
+                            # replace the patch with adjacent patch.
+                            loc_in_B = [i+h[2][0],j+h[2][1]]
+                            one = np.linalg.norm(source_patches[i,j] - target_patches[loc_in_B[0],loc_in_B[1]])
+                            two = _tiebreaker.next()
+                            three = h[2]
+                            # since we are replacing the worst one with this patch. Just push and pop.
+                            set_none = heappushpop(f_heap[i][j],(one,two,three))
+                            f_coord_dictionary[i][j].pop(set_none[2],0)
+
+    else:
+                # consider f(x+1,y),f(x,y+1)
+        h_min,w_min,offsets = source_patches.shape[0]-1,source_patches.shape[1]-1,-1
+        # examining the offsets in reverse scan order starting from bottom
+        # goint to top
+        for i in range(h_min,-1,-1):
+            for j in range(w_min,-1,-1):
+                if propagation_enabled:
+                    for h in f_heap[min(i+1,h_min-1)][j]:
+                        if(within_dim([i+h[2][0],j+h[2][1]],source_patches) and (h[2] in f_coord_dictionary[i][j].keys())):
+                            # replace the patch with adjacent patch.
+                            loc_in_B = [i+h[2][0],j+h[2][1]]
+                            one = np.linalg.norm(source_patches[i,j] - target_patches[loc_in_B[0],loc_in_B[1]])
+                            two = _tiebreaker.next()
+                            three = h[2]
+                            # since we are replacing the worst one with this patch. Just push and pop.
+                            set_none = heappushpop(f_heap[i][j],(one,two,three))
+                            f_coord_dictionary[i][j].pop(set_none[2],0)
+                    for h in f_heap[i][min(j+1,w_min-1)]:
+                        if(within_dim([i+h[2][0],j+h[2][1]],source_patches) and (h[2] in f_coord_dictionary[i][j].keys())):
+                            # replace the patch with adjacent patch.
+                            loc_in_B = [i+h[2][0],j+h[2][1]]
+                            one = np.linalg.norm(source_patches[i,j] - target_patches[loc_in_B[0],loc_in_B[1]])
+                            two = _tiebreaker.next()
+                            three = h[2]
+                            # since we are replacing the worst one with this patch. Just push and pop.
+                            set_none = heappushpop(f_heap[i][j],(one,two,three))
+                            f_coord_dictionary[i][j].pop(set_none[2],0)
 
     return global_vars
 
@@ -154,8 +223,8 @@ def NNF_matrix_to_NNF_heap(source_patches, target_patches, f_k):
             for k in range(f_k.shape[0]):
                 f_coord_dictionary[i][j][(f_k[k,i,j,0],f_k[k,i,j,1])] = None
                 one = np.linalg.norm(source_patches[i,j]-target_patches[(i+f_k[k,i,j,0]),(j+f_k[k,i,j,1])])
-                two = _tiebreaker.next()
-                three =  f_k[k,i,j]
+                two =_tiebreaker.next()
+                three =  (f_k[k,i,j,0],f_k[k,i,j,1])
                 heappush(f_heap[i][j],(one,two,three))
     #############################################
     # NNF_heap_to_NNF_matrix(f_heap)
@@ -189,13 +258,12 @@ def NNF_heap_to_NNF_matrix(f_heap):
             n_larges = nlargest(k,f_heap[i][j])
             # print(n_larges)
             # sys.exit()
-            for k in range(k):
-                f_k[k,i,j] = n_larges[k][2]
-                D_k[k,i,j] = n_larges[k][0]
+            for l in range(k):
+                f_k[l,i,j] = n_larges[l][2]
+                D_k[l,i,j] = n_larges[l][0]
     ##############################################
     return f_k, D_k
-
-
+#
 def nlm(target, f_heap, h):
 
 
@@ -205,21 +273,30 @@ def nlm(target, f_heap, h):
     #############################################
     ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
     #############################################
-
-
-    #############################################
-
+    # result = np.zeros(target.shape)
+    # max_i,max_j = target.shape[0],target.shape[1]
+    # for i in range(max_i):
+    #     for j in range(max_j):
+    #         z = 0
+    #         for l in f_heap[i][j]:
+    #             w = np.exp(f[0] / h2)
+    #             z += w
+    #         #     x = i + f[2][0]
+    #         #     y = j + f[2][1]
+    #         #     if x < 0 or x >= N or y < 0 or y >= M:
+    #         #         continue
+    #         #     denoised[i][j] += w * target[x, y]
+    #         # if z == 0:
+    #         #     continue
+    #         result = result[i][j] / normalizer
     return denoised
-
-
-
 
 #############################################
 ###  PLACE ADDITIONAL HELPER ROUTINES, IF ###
 ###  ANY, BETWEEN THESE LINES             ###
 #############################################
-
-
+def within_dim(x,y):
+    return (x[0] < 0 or x[0] > y.shape[0]) or (x[1] < 0 or x[1] > y.shape[1])
 #############################################
 
 
@@ -247,15 +324,14 @@ def nlm(target, f_heap, h):
 
 def reconstruct_source_from_target(target, f):
     rec_source = None
-
     ################################################
     ###  PLACE YOUR A3 CODE BETWEEN THESE LINES  ###
     ################################################
-
-
+    y = make_coordinates_matrix(target.shape) + f
+    result = target[y[:,:,0],f[:,:,1]]
     #############################################
 
-    return rec_source
+    return result
 
 
 # This function takes an NxM image with C color channels and a patch size P
@@ -283,7 +359,6 @@ def make_patch_matrix(im, patch_size):
     for i in range(patch_size):
         for j in range(patch_size):
             patch_matrix[:, :, :, i * patch_size + j] = padded_im[i:(i + im.shape[0]), j:(j + im.shape[1]), :]
-
     return patch_matrix
 
 
@@ -305,5 +380,4 @@ def make_coordinates_matrix(im_shape, step=1):
     range_y = np.arange(0, im_shape[0], step)
     axis_x = np.repeat(range_x[np.newaxis, ...], len(range_y), axis=0)
     axis_y = np.repeat(range_y[..., np.newaxis], len(range_x), axis=1)
-
     return np.dstack((axis_y, axis_x))

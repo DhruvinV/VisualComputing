@@ -133,6 +133,8 @@ class PatchMatch:
         if read is not None:
             self._images[key] = read.astype(np.uint8)
             print(key,self._images[key].shape)
+            # y = cv.cvtColor(read, cv.COLOR_RGB2GRAY)
+            # print(y.shape)
             return True, "Image read success"
         #########################################
         return success, msg

@@ -1,4 +1,4 @@
-python viscomp.py --nlm --nlm_h 25 --k 15 --partial-results --rec-source --nnf-image --nnf-vectors --nnf-line-color r --iters 5 --patch-esize 7 --alpha 0.5 --source ../test_images/jaguar2/source_noise2.png --target ../test_images/jaguar2/source_noise2.png --output ../results/jaguar2/jaguar2
+python viscomp.py --nlm --nlm_h 25 --k 15 --partial-results --rec-source --nnf-image --nnf-vectors --nnf-line-color r --iters 5 --patch-esize 7 --alpha 0.5 --source /h/u8/c9/00/vekariya/Desktop/A4/VisualComputing/A4/test_images/jaguar2/source_noise2.png --target /h/u8/c9/00/vekariya/Desktop/A4/VisualComputing/A4/test_images/jaguar2/source_noise2.png
 -----------------------------------------------------------------
 PatchMatch parameters:
 	Initial NNF: 		Generated internally
