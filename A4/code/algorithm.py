@@ -130,8 +130,6 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                             worst = set_none[0]
                     worst = f_heap[max(i-1, 0)][j][0][0]
                     for h in f_heap[max(i-1, 0)][j]:
-                        # if(h[2] == (75,-139)):
-                            # print(i,j)
                         if((within_dim([i+h[2][0],j+h[2][1]],source_patches)==False) and (h[2] not in f_coord_dictionary[i][j])):
                             # replace the patch with adjacent patch.``
                             loc_in_B = [i+h[2][0],j+h[2][1]]
@@ -146,34 +144,45 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                             f_coord_dictionary[i][j].pop(set_none[2])
                                 # worst = set_none[0]
                 if random_enabled:
-                    for neighbor in f_heap[i][j]: # Random search around pixel and its neighbors
-                    # k_neighb = f_coord_dictionary[i][j].keys()
-                    # pop = np.array(list(k_neighb))
-                        # print(neighbor)
-                        current_dist = neighbor[0] #(similarity, null, offset)
+                    for neighbor in f_heap[i][j][1:]:
+                        worst_D = f_heap[i][j][0]
                         ofs = neighbor[2]
-                        current_patch = np.array([i+ofs[0], j+ofs[1]])
-                        max_loop = int(itera)
+                        patch = np.array([i+ofs[0], j+ofs[1]])
                         l = 0
-                        while(l < max_loop):
-                            R = np.random.randint(-1,2,size=2) # [1, 1]
-                            # print(R,current_patch,w*(alpha**l))
-                            new_point = current_patch + w*(alpha**l)*R
-                            # clip new point to fit in image
-                            new_point.astype(int)
-                            new_point = [int(new_point[0]),int(new_point[1])]
-                            # print(new_point)
-                            # print(within_dim(tuple(new_point),source_patches))
-                            if(within_dim(tuple(new_point),source_patches)==False):
-                                new_dist = -np.linalg.norm(source_patches[i, j] - target_patches[int(new_point[0]), int(new_point[1])])
-                                # new_point = [new_point[0]-i,new_point[1]-j]
-                                new_tup = (new_dist, _tiebreaker.next(),tuple(new_point))
-                                if(-new_dist > current_dist):
-                                    if(tuple(new_point) not in f_coord_dictionary[i][j]):
-                                        f_coord_dictionary[i][j][tuple(new_point)] = 1
-                                        set_none = heappushpop(f_heap[i][j],new_tup)
-                                        f_coord_dictionary[i][j].pop(set_none[2])
-                            l = l+1
+                        while(l<int(itera)):
+                             R = np.random.randint(-1,2,size=2) # [1, 1]
+                             new_p =  patch + w*(alpha**l)*R
+                             print(new_p,new_p.shape)
+                             sys.exit()
+                             # x = np.clip(new_p,0,source_patches.shape[0])
+                    # for neighbor in f_heap[i][j]: # Random search around pixel and its neighbors
+                    # # k_neighb = f_coord_dictionary[i][j].keys()
+                    # # pop = np.array(list(k_neighb))
+                    #     # print(neighbor)
+                    #     current_dist = neighbor[0] #(similarity, null, offset)
+                    #     ofs = neighbor[2]
+                    #     current_patch = np.array([i+ofs[0], j+ofs[1]])
+                    #     max_loop = int(itera)
+                    #     l = 0
+                    #     while(l < max_loop):
+                    #         R = np.random.randint(-1,2,size=2) # [1, 1]
+                    #         # print(R,current_patch,w*(alpha**l))
+                    #         new_point = current_patch + w*(alpha**l)*R
+                    #         # clip new point to fit in image
+                    #         new_point.astype(int)
+                    #         new_point = [int(new_point[0]),int(new_point[1])]
+                    #         # print(new_point)
+                    #         # print(within_dim(tuple(new_point),source_patches))
+                    #         if(within_dim(tuple(new_point),source_patches)==False):
+                    #             new_dist = -np.linalg.norm(source_patches[i, j] - target_patches[int(new_point[0]), int(new_point[1])])
+                    #             # new_point = [new_point[0]-i,new_point[1]-j]
+                    #             new_tup = (new_dist, _tiebreaker.next(),tuple(new_point))
+                    #             if(-new_dist > current_dist):
+                    #                 if(tuple(new_point) not in f_coord_dictionary[i][j]):
+                    #                     f_coord_dictionary[i][j][tuple(new_point)] = 1
+                    #                     set_none = heappushpop(f_heap[i][j],new_tup)
+                    #                     f_coord_dictionary[i][j].pop(set_none[2])
+                    #         l = l+1
     else:
                 # consider f(x+1,y),f(x,y+1)
         h_min,w_min,offsets = source_patches.shape[0]-1,source_patches.shape[1]-1,-1
