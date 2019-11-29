@@ -123,7 +123,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                             three = h[2]
                             # pritn(three)A
                             # print(one,worst)
-                            if(-one > worst):
+                            if(one > worst):
                                 f_coord_dictionary[i][j][three] = 1
                                 set_none = heappushpop(f_heap[i][j],(one,two,three))
                                 worst = set_none[0]
@@ -138,7 +138,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                             three = h[2]
                             # prinT(three)
                             # since we are replacing the worst one with this patch. Just push and pop.
-                            if(-one > worst):
+                            if(one > worst):
                                 f_coord_dictionary[i][j][three] = 1
                                 set_none = heappushpop(f_heap[i][j],(one,two,three))
                                 # f_coord_dictionary[i][j].pop(set_none[2])
@@ -163,73 +163,57 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                                  worst_D = f_heap[i][j][0]
                              l=l+1
     else:
-                # consider f(x+1,y),f(x,y+1)
         h_min,w_min,offsets = source_patches.shape[0]-1,source_patches.shape[1]-1,-1
-        # examining the offsets in reverse scan order starting from bottom
-        # goint to top
         for i in range(h_min,-1,-1):
             for j in range(w_min,-1,-1):
                 if propagation_enabled:
-                    worst = f_heap[min(i+1,h_min-1)][j][0][0]
+                    worst = f_heap[i][j][0][0]
                     for h in f_heap[min(i+1,h_min-1)][j]:
-                        if(not(within_dim([i+h[2][0],j+h[2][1]],source_patches)) and (h[2] not in f_coord_dictionary[min(i+1,h_min-1)][j].keys())):
+                        if((within_dim([i+h[2][0],j+h[2][1]],source_patches)==False) and (h[2] not in f_coord_dictionary[i][j])):
                             # replace the patch with adjacent patch.
                             loc_in_B = [i+h[2][0],j+h[2][1]]
-                            one = np.linalg.norm(source_patches[i,j] - target_patches[loc_in_B[0],loc_in_B[1]])
+                            one = -np.linalg.norm(source_patches[i,j] - target_patches[loc_in_B[0],loc_in_B[1]])
                             two = _tiebreaker.next()
                             three = h[2]
-                            # since we are replacing the worst one with this patch. Just push and pop.
-                            # print(one,worst)
-                            if(-one > worst):
-                                f_coord_dictionary[min(i+1,h_min-1)][j][three] = None
-                                set_none = heappushpop(f_heap[min(i+1,h_min-1)][j],(-one,two,three))
-                                f_coord_dictionary[min(i+1,h_min-1)][j].pop(set_none[2])
-                                worst = f_heap[min(i+1,h_min-1)][j][0]
-                            # set_none = heappushpop(f_heap[i][j],(one,two,three))
-                            # f_coord_dictionary[i][j].pop(set_none[2])
-                    worst = f_heap[i][min(j+1,w_min-1)][0][0]
+                            if(one > worst):
+                                f_coord_dictionary[i][j]][three] = None
+                                set_none = heappushpop(f_heap[min(i+1,h_min-1)][j],(one,two,three))
+                                worst = f_heap[i][j][0][0]
+                    worst = f_heap[i][j][0][0]
                     for h in f_heap[i][min(j+1,w_min-1)]:
-                        if(h[2] == (75,-139)):
-                            print(i,j)
-                        if(not(within_dim([i+h[2][0],j+h[2][1]],source_patches)) and (h[2] not in f_coord_dictionary[i][min(j+1,w_min-1)].keys())):
+                        if((within_dim([i+h[2][0],j+h[2][1]],source_patches)==False) and (h[2] not in f_coord_dictionary[i][j])):
                             # replace the patch with adjacent patch.
                             loc_in_B = [i+h[2][0],j+h[2][1]]
-                            one = np.linalg.norm(source_patches[i,j] - target_patches[loc_in_B[0],loc_in_B[1]])
+                            one = -np.linalg.norm(source_patches[i,j] - target_patches[loc_in_B[0],loc_in_B[1]])
                             two = _tiebreaker.next()
                             three = h[2]
                             # since we are replacing the worst one with this patch. Just push and pop.
                             # set_none = heappushpop(f_heap[i][min(j+1,w_min-1)],(one,two,three))
                             # f_coord_dictionary[.pop(set_none[2])
                             # print(one,worst)
-                            if(-one > worst):
-                                f_coord_dictionary[min(i+1,h_min-1)][j][three] = None
-                                set_none = heappushpop(f_heap[i][min(j+1,w_min-1)],(-one,two,three))
-                                f_coord_dictionary[i][min(j+1,w_min-1)].pop(set_none[2])
-                                worst = f_heap[i][min(j+1,w_min-1)][0][0]
+                            if(one > worst):
+                                f_coord_dictionary[i][j][three] = None
+                                set_none = heappushpop(f_heap[i][j],(one,two,three))
+                                worst = f_heap[i][j][0][0]
                 if random_enabled:
-                    for neighbor in f_heap[i][j]: # Random search around pixel and its neighbors
-                    # k_neighb = f_coord_dictionary[i][j].keys()
-                    # pop = np.array(list(k_neighb))
-                        current_dist = neighbor[0] #(similarity, null, offset)
+                    for neighbor in f_heap[i][j][1:]:
+                        worst_D = f_heap[i][j][0]
                         ofs = neighbor[2]
-                        current_patch = [i, j] + lis(ofs)
-                        max_loop = int(itera)
+                        patch = np.array([i+ofs[0], j+ofs[1]])
                         l = 0
-                        while(l < max_loop):
-                            R = np.random.randint(-1,2,size=2) # [1, 1]
-                            new_point = current_patch + w*(alpha**l)*R
-                            # clip new point to fit in image
-                            # print(new_point)
-                            if(within_dim(new_point,source_patches)==False):
-                                new_dist = np.linalg.norm(source_patches[i, j] - target_patches[new_point[0], new_point[1]])
-                                new_tup = (-new_dist, _tiebreaker.next(),tuple(new_point))
-                                if(-new_dist > current_dist[0]):
-                                    if(tuple(new_point) not in f_coord_dictionary[i][j].keys()):
-                                        f_coord_dictionary[i][j][tuple(new_point)] = None
-                                        set_none = heappushpop(f_heap[i][j],new_tup)
-                                        f_coord_dictionary[i][j].pop(set_none[2])
-                            l = l+1
-
+                        while(l<int(itera)):
+                             R = np.random.randint(-1,2,size=2) # [1, 1]
+                             new_p =  patch + w*(alpha**l)*R
+                             x = np.clip(new_p[0],0,source_patches.shape[0]-1)
+                             y = np.clip(new_p[1],0,source_patches.shape[1]-1)
+                             ux,uy = int(x),int(y)
+                             dist = np.linalg.norm(source_patches[i,j]-target_patches[ux,uy])
+                             new_d = (-dist, _tiebreaker.next(),tuple(neighbor[2]))
+                             if(new_d[0]>worst_D[0] and ((new_d[2] in f_coord_dictionary[i][j].keys()) == False)):
+                                 f_coord_dictionary[i][j][new_d[2]] = 1
+                                 heappushpop(f_heap[i][j],new_d)
+                                 worst_D = f_heap[i][j][0]
+                             l=l+1
     return global_vars
 
 
