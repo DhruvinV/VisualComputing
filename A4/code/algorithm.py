@@ -177,7 +177,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                             two = _tiebreaker.next()
                             three = h[2]
                             if(one > worst):
-                                f_coord_dictionary[i][j]][three] = None
+                                f_coord_dictionary[i][j][three] = None
                                 set_none = heappushpop(f_heap[i][j],(one,two,three))
                                 worst = f_heap[i][j][0][0]
                     worst = f_heap[i][j][0][0]
