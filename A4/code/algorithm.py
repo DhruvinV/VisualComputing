@@ -338,29 +338,55 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
 # in the heap: it is assumed that the heap returned by this function contains EXACTLY k tuples
 # per pixel, some of which MAY be duplicates or may point outside the image borders
 
+# def NNF_matrix_to_NNF_heap(source_patches, target_patches, f_k):
+#
+#     f_heap = None
+#     f_coord_dictionary = None
+#
+#     #############################################
+#     ###PLACEYOURCODEBETWEEN THESE LINES  ###
+#     #############################################
+#     heap,coord_dict = np.zeros((source_patches.shape[0:2])),np.zeros((source_patches.shape[0:2]))
+#     f_heap,f_coord_dictionary = heap.tolist(),coord_dict.tolist()
+#     for i in range(source_patches.shape[0]):
+#         for j in range(source_patches.shape[1]):
+#             f_heap[i][j] = []
+#             f_coord_dictionary[i][j] = {}
+#             for k in range(f_k.shape[0]):
+#                 f_coord_dictionary[i][j][(f_k[k,i,j,0],f_k[k,i,j,1])] = 1
+#                 one = -np.linalg.norm(source_patches[i,j]-target_patches[(i+f_k[k,i,j,0]),(j+f_k[k,i,j,1])])
+#                 two =_tiebreaker.next()
+#                 three =  (f_k[k,i,j,0],f_k[k,i,j,1])
+#                 heappush(f_heap[i][j],(one,two,three))
+#     #############################################
+#     # NNF_heap_to_NNF_matrix(f_heap)
+#     return f_heap, f_coord_dictionary
 def NNF_matrix_to_NNF_heap(source_patches, target_patches, f_k):
 
     f_heap = None
     f_coord_dictionary = None
 
     #############################################
-    ###PLACEYOURCODEBETWEEN THESE LINES  ###
+    ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
     #############################################
-    heap,coord_dict = np.zeros((source_patches.shape[0:2])),np.zeros((source_patches.shape[0:2]))
-    f_heap,f_coord_dictionary = heap.tolist(),coord_dict.tolist()
-    for i in range(source_patches.shape[0]):
-        for j in range(source_patches.shape[1]):
-            f_heap[i][j] = []
-            f_coord_dictionary[i][j] = {}
-            for k in range(f_k.shape[0]):
-                f_coord_dictionary[i][j][(f_k[k,i,j,0],f_k[k,i,j,1])] = 1
-                one = -np.linalg.norm(source_patches[i,j]-target_patches[(i+f_k[k,i,j,0]),(j+f_k[k,i,j,1])])
-                two =_tiebreaker.next()
-                three =  (f_k[k,i,j,0],f_k[k,i,j,1])
-                heappush(f_heap[i][j],(one,two,three))
-    #############################################
-    # NNF_heap_to_NNF_matrix(f_heap)
+    source_patches[np.isnan(source_patches)] = 0
+    target_patches[np.isnan(target_patches)] = 0
+    k, N, M, temp = f_k.shape
+    f_heap = []
+    f_coord_dictionary = []
+    for i in range(N):
+        f_heap.append([])
+        f_coord_dictionary.append([])
+        for j in range(M):
+            f_heap[i].append([])
+            f_coord_dictionary[i].append({})
+            for p in range(k):
+                score = -np.linalg.norm(source_patches[i, j] - target_patches[i + f_k[p, i, j, 0], j + f_k[p, i, j, 1]])
+                heappush(f_heap[i][j], (score, _tiebreaker.next(), (f_k[p, i, j, 0], f_k[p, i, j, 1])))
+                f_coord_dictionary[i][j][(f_k[p, i, j, 0], f_k[p, i, j, 1])] = 1
+
     return f_heap, f_coord_dictionary
+
 
 
 # Given a 2D array of heaps given as input, this function creates a kxNxMx2
@@ -378,23 +404,46 @@ def NNF_matrix_to_NNF_heap(source_patches, target_patches, f_k):
 #                            corresponding to the displacement f_k[i][r][c]
 #
 
+# def NNF_heap_to_NNF_matrix(f_heap):
+#
+#     #############################################
+#     ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
+#     #############################################
+#     max_i,max_j,k = len(f_heap),len(f_heap[1]),len(f_heap[0][1])
+#     f_k,D_k = np.zeros((k,max_i,max_j,2),dtype=int),np.zeros((k,max_i,max_j))
+#     for i in range(max_i):
+#         for j in range(max_j):
+#             n_larges = nlargest(k,f_heap[i][j])
+#             # print(n_larges)
+#             # sys.exit()
+#             for l in range(k):
+#                 f_k[l,i,j] = n_larges[l][2]
+#                 D_k[l,i,j] = n_larges[l][0]
+#     ##############################################
+#     return f_k, -D_k
 def NNF_heap_to_NNF_matrix(f_heap):
 
     #############################################
     ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
     #############################################
-    max_i,max_j,k = len(f_heap),len(f_heap[1]),len(f_heap[0][1])
-    f_k,D_k = np.zeros((k,max_i,max_j,2),dtype=int),np.zeros((k,max_i,max_j))
-    for i in range(max_i):
-        for j in range(max_j):
-            n_larges = nlargest(k,f_heap[i][j])
-            # print(n_larges)
-            # sys.exit()
-            for l in range(k):
-                f_k[l,i,j] = n_larges[l][2]
-                D_k[l,i,j] = n_larges[l][0]
-    ##############################################
-    return f_k, -D_k
+    N = len(f_heap)
+    M = len(f_heap[0])
+    k = len(f_heap[0][0])
+
+    f_k = np.zeros((k, N, M, 2))
+    D_k = np.zeros((k, N, M))
+    for i in range(N):
+        for j in range(M):
+            topN = nlargest(k, f_heap[i][j])
+            for p in range(len(topN)):
+                f_k[p, i, j, 0] = topN[p][2][0]
+                f_k[p, i, j, 1] = topN[p][2][1]
+                D_k[p, i, j] = topN[p][0]
+    f_k = f_k.astype(int)
+    #############################################
+
+    return f_k, D_k
+
 #
 # def nlm(target, f_heap, h):
 #     # this is a dummy statement to return the image given as input
