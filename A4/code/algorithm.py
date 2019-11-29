@@ -165,6 +165,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
     else:
         h_min,w_min,offsets = source_patches.shape[0]-1,source_patches.shape[1]-1,-1
         for i in range(h_min,-1,-1):
+            print(i)
             for j in range(w_min,-1,-1):
                 if propagation_enabled:
                     worst = f_heap[i][j][0][0]
