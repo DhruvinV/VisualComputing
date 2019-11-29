@@ -162,7 +162,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                                      f_coord_dictionary[i][j][new_d[2]] = 1
                                      heappushpop(f_heap[i][j],new_d)
                                      worst_D = f_heap[i][j][0]
-                            l=l+1
+                             l=l+1
                              # sys.exit()
                              # x = np.clip(new_p,0,source_patches.shape[0])
                     # for neighbor in f_heap[i][j]: # Random search around pixel and its neighbors
