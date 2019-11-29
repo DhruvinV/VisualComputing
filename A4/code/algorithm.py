@@ -154,7 +154,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                              new_p =  patch + w*(alpha**l)*R
                              x = np.clip(new_p,0,source_patches.shape[0])
                              y = np.clip(new_p,0,source_patches.shape[1])
-                             ux,uy = int(p[0]),int(p[1])
+                             ux,uy = int(x),int(y)
                              dist = np.linalg.norm(source_patches[i,j]-target_patches[ux,uy])
                              new_d = (-dist, _tiebreaker.next(),tuple(neighbor[2]))
                              if(new_d[0]>worst_D[0] and ((new_d[2] in f_coord_dictionary[i][j].keys()) == False)):
