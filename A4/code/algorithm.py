@@ -127,7 +127,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                                 f_coord_dictionary[i][j][three] = 1
                                 set_none = heappushpop(f_heap[i][j],(one,two,three))
                                 worst = set_none[0]
-                                f_coord_dictionary[i][j].pop(set_none[2],None)
+                                # f_coord_dictionary[i][j].pop(set_none[2],None)
                     worst = f_heap[i][j][0][0]
                     for h in f_heap[max(i-1, 0)][j]:
                         if((within_dim([i+h[2][0],j+h[2][1]],source_patches)==False) and (h[2] not in f_coord_dictionary[i][j])):
@@ -141,7 +141,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                             if(-one > worst):
                                 f_coord_dictionary[i][j][three] = 1
                                 set_none = heappushpop(f_heap[i][j],(one,two,three))
-                                f_coord_dictionary[i][j].pop(set_none[2])
+                                # f_coord_dictionary[i][j].pop(set_none[2])
                                 worst = set_none[0]
                 if random_enabled:
                     for neighbor in f_heap[i][j][1:]:
