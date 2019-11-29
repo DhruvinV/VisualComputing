@@ -396,25 +396,55 @@ def NNF_heap_to_NNF_matrix(f_heap):
     ##############################################
     return f_k, -D_k
 #
+# def nlm(target, f_heap, h):
+#     # this is a dummy statement to return the image given as input
+#     result = np.empty(target.shape)
+#     max_i,max_j,k = target.shape[0],target.shape[1],len(f_heap[0][0])
+#     # #############################################
+#     # ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
+#     # #############################################
+#     for i in range(max_i):
+#         for j in range(max_j):
+#             normalizer = 0
+#             for l in range(k):
+#                 heap = f_heap[i][j][l]
+#                 summa = np.exp((heap[0])/(h**2))
+#                 if(within_dim((heap[2][0]+i,heap[2][1]+j),target)==False):
+#                     result[i][j] = summa * target[heap[2][0]+i,heap[2][1]+j]
+#                 normalizer += summa
+#             result[i][j] = result[i][j] / normalizer
+#     return result
 def nlm(target, f_heap, h):
-    # this is a dummy statement to return the image given as input
-    result = np.empty(target.shape)
-    max_i,max_j,k = target.shape[0],target.shape[1],len(f_heap[0][0])
-    # #############################################
-    # ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
-    # #############################################
-    for i in range(max_i):
-        for j in range(max_j):
-            normalizer = 0
-            for l in range(k):
-                heap = f_heap[i][j][l]
-                summa = np.exp((heap[0])/(h**2))
-                if(within_dim((heap[2][0]+i,heap[2][1]+j),target)==False):
-                    result[i][j] = summa * target[heap[2][0]+i,heap[2][1]+j]
-                normalizer += summa
-            result[i][j] = result[i][j] / normalizer
-    return result
 
+
+    # this is a dummy statement to return the image given as input
+    denoised = target
+
+    #############################################
+    ###  PLACE YOUR CODE BETWEEN THESE LINES  ###
+    #############################################
+    denoised = np.zeros(target.shape)
+    h2 = h * h
+    N = target.shape[0]
+    M = target.shape[1]
+    for i in range(N):
+        for j in range(M):
+            z = 0
+            for f in f_heap[i][j]:
+                w = np.exp(f[0] / h2)
+                z += w
+                x = i + f[2][0]
+                y = j + f[2][1]
+                if x < 0 or x >= N or y < 0 or y >= M:
+                    continue
+                denoised[i][j] += w * target[x, y]
+            if z == 0:
+                continue
+            denoised[i][j] /= z
+
+    #############################################
+
+    return denoised
 #############################################
 ###  PLACE ADDITIONAL HELPER ROUTINES, IF ###
 ###  ANY, BETWEEN THESE LINES             ###
