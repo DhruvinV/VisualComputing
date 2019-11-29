@@ -1,4 +1,4 @@
-CSC320 Winter 2017
+
 # Assignment 4
 # (c) Olga (Ge Ya) Xu, Kyros Kutulakos
 #
