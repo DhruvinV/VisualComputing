@@ -304,7 +304,8 @@ def nlm(target, f_heap, h):
                 if(within_dim((heap[2][0]+i,heap[2][1]+j),target)==False):
                     result[i][j] = summa * target[heap[2][0]+i,heap[2][1]+j]
                     normalizer += summa
-            result[i][j] = result[i][j] / normalizer if summa!=0 else pass
+            if summa!=0:
+                result[i][j] = result[i][j] / normalizer if summa!=0
     return result
 
 #############################################
