@@ -110,7 +110,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                         # if(h[2] == (75,-139)):
                         #     # print(f_coord_dictionary[i][max(j-1,0)].keys())
                         #     print(i,j)
-                        if((within_dim([i+h[2][0],j+h[2][1]],source_patches)==False) and (h[2] not in f_coord_dictionary[i][j])):
+                        if((within_dim([i+h[2][0],j+h[2][1]],source_patches)==False) and (h[2] not in f_coord_dictionary[i][j].keys())):
                             # print(i,j)
                             # replace the patch with adjacent patch.
                             loc_in_B = [i+h[2][0],j+h[2][1]]
@@ -127,7 +127,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                                 # f_coord_dictionary[i][j].pop(set_none[2],None)
                     worst = f_heap[i][j][0][0]
                     for h in f_heap[max(i-1, 0)][j]:
-                        if((within_dim([i+h[2][0],j+h[2][1]],source_patches)==False) and (h[2] not in f_coord_dictionary[i][j])):
+                        if((within_dim([i+h[2][0],j+h[2][1]],source_patches)==False) and (h[2] not in f_coord_dictionary[i][j].keys())):
                             # replace the patch with adjacent patch.``
                             loc_in_B = [i+h[2][0],j+h[2][1]]
                             one = -np.linalg.norm(source_patches[i,j] - target_patches[loc_in_B[0],loc_in_B[1]])
@@ -167,7 +167,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                 if propagation_enabled:
                     worst = f_heap[i][j][0][0]
                     for h in f_heap[min(i+1,h_min-1)][j]:
-                        if((within_dim([i+h[2][0],j+h[2][1]],source_patches)==False) and (h[2] not in f_coord_dictionary[i][j])):
+                        if((within_dim([i+h[2][0],j+h[2][1]],source_patches)==False) and (h[2] not in f_coord_dictionary[i][j].keys())):
                             # replace the patch with adjacent patch.
                             loc_in_B = [i+h[2][0],j+h[2][1]]
                             one = -np.linalg.norm(source_patches[i,j] - target_patches[loc_in_B[0],loc_in_B[1]])
@@ -298,12 +298,12 @@ def nlm(target, f_heap, h):
     for i in range(max_i):
         for j in range(max_j):
             normalizer = 0
-            for l in range(k):
-                heap = f_heap[i][j][l]
+            for l in f_heap[i][j]:
+                heap = l
                 summa = np.exp((heap[0])/(h**2))
+                normalizer += summa
                 if(within_dim((heap[2][0]+i,heap[2][1]+j),target)==False):
-                    result[i][j] = summa * target[heap[2][0]+i,heap[2][1]+j]
-                    normalizer += summa
+                    result[i][j] += summa * target[heap[2][0]+i,heap[2][1]+j]
             if summa!=0:
                 result[i][j] /= normalizer
     return result
