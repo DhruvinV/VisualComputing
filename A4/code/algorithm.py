@@ -108,7 +108,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                 # j = 414
                 if propagation_enabled:
                     # d_set = dict()
-                    worst = f_heap[i][max(j-1,0)][0][0]
+                    worst = f_heap[i][j][0][0]
                     for h in f_heap[i][max(j-1,0)]:
                         # if(h[2] == (75,-139)):
                         #     # print(f_coord_dictionary[i][max(j-1,0)].keys())
@@ -123,12 +123,12 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                             three = h[2]
                             # pritn(three)A
                             # print(one,worst)
-                            # if(-one > worst):
-                            f_coord_dictionary[i][j][three] = 1
-                            set_none = heappushpop(f_heap[i][j],(one,two,three))
-                            f_coord_dictionary[i][j].pop(set_none[2],None)
-                            worst = set_none[0]
-                    worst = f_heap[max(i-1, 0)][j][0][0]
+                            if(-one > worst):
+                                f_coord_dictionary[i][j][three] = 1
+                                set_none = heappushpop(f_heap[i][j],(one,two,three))
+                                worst = set_none[0]
+                                f_coord_dictionary[i][j].pop(set_none[2],None)
+                    worst = f_heap[i][j][0][0]
                     for h in f_heap[max(i-1, 0)][j]:
                         if((within_dim([i+h[2][0],j+h[2][1]],source_patches)==False) and (h[2] not in f_coord_dictionary[i][j])):
                             # replace the patch with adjacent patch.``
@@ -138,11 +138,11 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                             three = h[2]
                             # prinT(three)
                             # since we are replacing the worst one with this patch. Just push and pop.
-                            # if(-one > worst):
-                            f_coord_dictionary[i][j][three] = 1
-                            set_none = heappushpop(f_heap[i][j],(one,two,three))
-                            f_coord_dictionary[i][j].pop(set_none[2])
-                                # worst = set_none[0]
+                            if(-one > worst):
+                                f_coord_dictionary[i][j][three] = 1
+                                set_none = heappushpop(f_heap[i][j],(one,two,three))
+                                f_coord_dictionary[i][j].pop(set_none[2])
+                                worst = set_none[0]
                 if random_enabled:
                     for neighbor in f_heap[i][j][1:]:
                         worst_D = f_heap[i][j][0]
