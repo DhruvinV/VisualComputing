@@ -14,7 +14,8 @@
 # import basic packages
 import cv2 as cv
 import numpy as np
-from algorithm import make_coordinates_matrix
+# from algorithm import make_coordinates_matrix
+from a1 import make_coordinates_matrix
 
 # The most important data structure in the PatchMatch algorithm is the one representing
 # the nearest-neighbour field (NNF). As explained in Section 3 of the paper, this is a vector
