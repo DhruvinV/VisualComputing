@@ -321,7 +321,7 @@ def nlm(target, f_heap, h):
             for l in range(k):
                 heap = f_heap[i][j][l]
                 summa = np.exp((heap[0])/(h**2))
-                if(within_dim((heap[2][0]+i,heap[2][1]+j),target)):
+                if(within_dim((heap[2][0]+i,heap[2][1]+j),target)==False):
                     result[i][j] = summa * target[heap[2][0]+i,heap[2][1]+j]
                 normalizer += summa
             result[i][j] = result[i][j] / normalizer
