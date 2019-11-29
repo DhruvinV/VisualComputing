@@ -305,7 +305,7 @@ def nlm(target, f_heap, h):
                     result[i][j] = summa * target[heap[2][0]+i,heap[2][1]+j]
                     normalizer += summa
             if summa!=0:
-                result[i][j] = result[i][j] / normalizer if summa!=0
+                result[i][j] /= normalizer
     return result
 
 #############################################
