@@ -152,8 +152,18 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                         while(l<int(itera)):
                              R = np.random.randint(-1,2,size=2) # [1, 1]
                              new_p =  patch + w*(alpha**l)*R
-                             print(new_p,new_p.shape)
-                             sys.exit()
+                             x = np.clip(new_p,0,source_patches.shape[0])
+                             y = np.clip(new_p,0,source_patches.shape[1])
+                             ux,uy = int(p[0]),int(p[1])
+                             dist = np.linalg.norm(source_patches[i,j]-target_patches[ux,uy])
+                             new_d = (-dist, _tiebreaker.next(),tuple(neighbor[2]))
+                             if(new_d[0]>worst_D[0]):
+                                 if((new_d[2] in f_coord_dictionary[i][j].keys()) == False):
+                                     f_coord_dictionary[i][j][new_d[2]] = 1
+                                     heappushpop(f_heap[i][j],new_d)
+                                     worst_D = f_heap[i][j][0]
+                            l=l+1
+                             # sys.exit()
                              # x = np.clip(new_p,0,source_patches.shape[0])
                     # for neighbor in f_heap[i][j]: # Random search around pixel and its neighbors
                     # # k_neighb = f_coord_dictionary[i][j].keys()
