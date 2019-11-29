@@ -177,7 +177,7 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                             three = h[2]
                             if(one > worst):
                                 f_coord_dictionary[i][j]][three] = None
-                                set_none = heappushpop(f_heap[min(i+1,h_min-1)][j],(one,two,three))
+                                set_none = heappushpop(f_heap[i][j],(one,two,three))
                                 worst = f_heap[i][j][0][0]
                     worst = f_heap[i][j][0][0]
                     for h in f_heap[i][min(j+1,w_min-1)]:
@@ -187,10 +187,6 @@ def propagation_and_random_search_k(source_patches, target_patches,f_heap,f_coor
                             one = -np.linalg.norm(source_patches[i,j] - target_patches[loc_in_B[0],loc_in_B[1]])
                             two = _tiebreaker.next()
                             three = h[2]
-                            # since we are replacing the worst one with this patch. Just push and pop.
-                            # set_none = heappushpop(f_heap[i][min(j+1,w_min-1)],(one,two,three))
-                            # f_coord_dictionary[.pop(set_none[2])
-                            # print(one,worst)
                             if(one > worst):
                                 f_coord_dictionary[i][j][three] = None
                                 set_none = heappushpop(f_heap[i][j],(one,two,three))
