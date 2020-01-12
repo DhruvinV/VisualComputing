@@ -1,3 +1,3 @@
 # VisualComputing
 
-All Things Related Visual Computing at UofT.
+All things related to Visual Computing(CSC320) at UofT.
