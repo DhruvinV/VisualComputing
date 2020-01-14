@@ -1,6 +1,6 @@
 # VisualComputing
 
-All things related to Visual Computing(CSC320) at UofT.
+All things related to Visual Computing
 
 Triangulation Matting - [Link to Smith and Blinn's Paper](http://cs.brown.edu/courses/cs129/results/final/njooma/smith.pdf)
 Object filling using Exemplar Based inpainting - [Link to the paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/criminisi_cvpr2003.pdf) 
